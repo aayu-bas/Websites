@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login to Yarnify</title>
+    <link rel="icon" href="yarnify.png">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Lilita+One&family=Pacifico&family=Sono:wght,MONO@200..800,1&display=swap');
+        *{
+           font-family: "Lilita One", sans-serif;
+            font-weight: 200;
+            font-style: normal; 
+            margin:0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body{
+           background: linear-gradient(135deg, #fde2e4,#fff1c1,#e6f4ea);
+       /* rgb(255, 255, 182); */
+        }
+        .login-container{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+        padding: 20px;
+        }
+        .form-container{
+        position: relative;
+        padding: 50px 40px;
+        background-color: white;
+        width: 100%;
+        max-width: 450px;
+        border-radius: 8px;
+        border: 1px solid rgb(0, 0, 0);
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        max-height: 95vh;
+        }
+
+        .form-header p{
+        font-size: 30px;
+        color: #f4b9e8;
+        font-family: "Pacifico", cursive;
+        font-weight: 400;
+        font-style: normal;
+        margin-left: 80px;
+        }     
+        .form-header h1{
+            font-size: 32px;   
+        }   
+
+        .form-box{
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            margin-top: 10px;
+        }
+        .input-group{
+            position: relative;
+            display: flex;
+        }
+        .input-field{
+            height: 48px;
+            padding-inline: 14px;
+            border: 1px solid rgb(184, 184, 184);
+            border-radius: 6px;
+            width: 100%;
+            outline:none;
+        }
+
+        #password{
+            padding-right: 30px;
+        }
+        .floating-label{
+            position: absolute;
+            top:40%;
+            left:8px;
+            transform:translateY(-50%);
+            color:rgb(188, 188, 188);
+            padding-inline: 6px;
+            transition: all 0.3s ease;
+            pointer-events: none;
+            z-index: 1000;
+        }
+
+        .input-field:focus ~.floating-label, .input-field:not(:placeholder-shown)~.floating-label{
+            top:0;
+            left: 8px;
+            transform: translateY(-50%);
+            font-size: 14px;
+            color:rgb(103, 103, 103);
+            
+        }
+        .input-field:focus{
+            border-color:rgb(182, 253, 207);
+        }
+        .input-field:not(:focus):not(:placeholder-shown)~floating-label{
+            color:beige;
+        }
+        .eye-icon{
+            position: absolute;
+            right: 15px;
+            display: flex;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+        .eye-icon .fa-eye{
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+            color: rgb(187, 187, 187);
+        }
+        .fa-eye-slash{
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+            color: rgb(187, 187, 187);
+        }
+        .checkbox-group{
+            display: flex;
+            justify-content: space-between;
+            gap:10px;
+            font-size: 14px;
+        }
+        .remember-me{
+            display: flex;
+            align-items: center;
+            gap:5px;
+        }
+        .form-btn{
+            display: flex;
+            justify-self: center;
+            align-items: center;
+            gap:10px;
+            height:48px;
+            background: none;
+            border-radius: 6px;
+            border: none;
+            cursor:pointer;  
+        }
+        .form-btn--submit{
+            background-color: rgb(62, 124, 223);
+            padding-inline: 150px;
+            color: white;
+            font-size: 16px;
+            transition: background-color 0.3 ease;
+        }
+        .form-btn--submit:hover{
+            background-color: rgb(30, 94, 245);
+        }
+        .form-bottom{
+            display: flex;
+            flex-direction: column;
+            gap:20px;
+            margin-top: 20px;  
+        }
+
+        .form-divider{
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            font-size: 14px;
+            color: rgb(187, 187, 187);
+            margin-top: 6px;
+        }
+        .form-divider:before,
+        .form-divider::after{
+            content: "";
+            flex: 1;
+            height: 1px;
+            background-color: rgb(183, 181, 181);
+            margin-bottom: 14px ;
+        }
+        .form-socials{
+            width: 100%;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap:20px;
+        }
+        .form-btn--social{
+            /* border: 1px solid rgb(169, 169, 169); */
+            transition: .3s ease;
+        }
+        .form-btn--social:hover{
+            background-color: rgb(228, 199, 247);
+        }
+        .btn-icon{
+            width: 50px;
+        }
+        .form-link{
+            color: #47a7f5;
+        }
+        .form-link:hover{
+            text-decoration: none;
+        }
+        .form-blob{
+            position: absolute;
+            width:100px;
+            height:100px;
+            top:0px;
+            right:0px;
+            z-index:0;
+        }
+        .blob-image{
+            position: absolute;
+            rotate:20deg;
+            pointer-events: none;
+            opacity: 0; 
+            transform: scale(0.5) translateX(100px);
+        }
+        .blob-image--1{
+            top:-210px;
+            right:-240px;
+            animation: welcomeIn 1.2s ease-out 0.3s forwards;
+            --final-opacity: 1;
+        }
+        .blob-image--2{
+            top:-205px;
+            right:-240px;
+            animation: welcomeIn 1.2s ease-out 0.6s forwards;
+            --final-opacity: 0.6;
+        }
+        .blob-image--3{
+            top:-200px;
+            right:-240px;
+            animation: welcomeIn 1.2s ease-out 0.9s forwards;
+            --final-opacity: 0.3;
+        }
+        @keyframes welcomeIn {
+            0%{
+                opacity: 0;
+                transform: scale(0.5) translateX(100px) rotate(180deg);
+            }
+            60%{
+                opacity: calc(var(--final-opacity)*0.8);
+                transform: scale(1.1) translateX(-10px) rotate(200deg);
+            }
+            100%{
+                opacity: calc(var(--final-opacity));
+                transform: scale(1) translateX(0px) rotate(205deg);
+            }
+        }
+        @media (max-widtd: 480px) {
+            .form-container{
+                padding: 60px 30px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="form-container">
+            <div class="form-blob">
+                <img src="login/blob.png" alt="blob" class="blob-image blob-image--1">
+                <img src="login/blob.png" alt="blob" class="blob-image blob-image--2">
+                <img src="login/blob.png" alt="blob" class="blob-image blob-image--3">
+            </div>
+            <div class="form-header">
+                <p>Yarnify</p>
+                <h1>Welcome Back</h1>
+            </div>
+            <form class="form-box">
+                <div class="input-group">
+                    <input type="email" id="email" class="input-field" required>
+                    <label for="email" class="floating-label">Email address</label>
+                </div>
+                <div class="input-group">
+                    <input type="password" id="password" class="input-field" required>
+                    <label for="password" class="floating-label">Password</label>
+                    <div class="eye-icon" onclick="togglePassword()">
+                        <i class='far fa-eye'></i>
+                    </div>
+                </div>
+                <div class="input-group checkbox-group">
+                    <div class="form-col remember-me">
+                        <input type="checkbox" id="remember-me-checkbox" class="checkbox-field">
+                        <label for="remember-me-checkbox">Remember me</label>
+                    </div>
+                    <div class="form-col">
+                        <a href="#" class="form-link">Forgot Password?</a>
+                    </div>
+                </div>
+
+                <button type="submit" class="form-btn form-btn--submit">Sign In</button>
+            </form>
+        <div class="form-divider">
+            <p>Or</p>
+        </div>
+        <div class="form-bottom">
+            <div class="form-socials">
+                <button class="form-btn form-btn--social">
+                    <img src="login/google.png" alt="google icon" class="btn-icon">
+                </button>
+
+                <button class="form-btn form-btn--social">
+                    <img src="login/facebook.png" alt="facebook icon" class="btn-icon">
+                </button>
+
+                <button class="form-btn form-btn--social">
+                    <img src="login/apple.png" alt="apple icon" class="btn-icon">
+                </button>
+                </div>
+
+                <p>Don't have an account?
+                <a href="#" class="form-link">Sign up</a>
+                </p>
+            </div>
+        </div>
+    </div>
+        
+
+    <script>
+        function togglePassword(){
+            const passwordInput = document.getElementById("password")
+            const eyeIcon= document.querySelector(".eye-icon")
+
+            if(passwordInput.type=== "password"){
+                passwordInput.type="text"
+                eyeIcon.innerHTML=`<i class="fa fa-eye-slash"></i>`
+            } else{
+                passwordInput.type="password"
+                eyeIcon.innerHTML=`<i class='far fa-eye'></i>`
+            }
+        }
+    </script>
+</body>
+</html>

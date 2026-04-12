@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" href="yarnify.png">
+</head>
+<body class="font-style">
+    <div id="header">
+        <div class="container">
+            <nav class="navbar">
+                <div class="navbar-left">
+                <img src="yarnify.png" alt="logo" class="logo">
+                <p class="brand-name">Yarnify</p>
+                </div>
+                <div id="tabs">
+                <ul>
+                    <li><a href="#">Home</a></li>
+                    <li><a href="#">About</a></li>
+                    <li><a href="#">Shop</a></li>
+                    <li><a href="#">Patterns</a></li>
+                    <li><a href="#">Yarns</a></li>
+                    <li><i class="fa-solid fa-magnifying-glass" title="search"></i></li>
+                    <li><i class="fa-regular fa-user" title="user" id="userIcon"></i></li>
+                    <li><i class="fa-solid fa-bag-shopping" title="cart"></i></li>
+                </ul>
+                </div>
+            </nav>
+        </div>
+    </div>
+
+    <div class="slideshow-container">
+        <div class="mySlides fade">
+            <div class="numbertext">#Spotlight 1</div>
+            <img src="slider/cardigans.png" alt="winter sale promo">
+            <div class="text"> WINTER SALES <i class='fas fa-snowflake' style='font-size:28px;color:rgb(190, 247, 247)'></i><br><br>
+            <a href="">SHOP ALL</a></div>
+        </div>
+
+        <div class="mySlides fade">
+            <div class="numbertext">#Spotlight 2</div>
+            <img src="slider/plush.png" alt="">
+            <div class="text">DISCOVER MORE AMIGURUMIS LIKE THIS</div>
+        </div>
+
+        <div class="mySlides fade">
+            <div class="numbertext">#Spotlight 3</div>
+            <img src="slider/discover_pattern.jpg" alt="">
+            <div class="text">Maybe some text</div>
+        </div>
+        <a class="prev" onclick="plusSlides(-1)">❮</a>
+        <a class="next" onclick="plusSlides(1)">❯</a>
+    </div>
+    <br>
+    <div style="text-align: center;">
+        <span class="dot" onclick="currentSlide(1)"></span>
+        <span class="dot" onclick="currentSlide(2)"></span>
+        <span class="dot" onclick="currentSlide(3)"></span> 
+    </div>
+
+    <h1>Our Sales(10% OFF)🎉</h1>
+    <div class="sale-container">
+        <div class="card">
+            <div class="sale">Sale</div>
+                <img src="photos/couplecat.png">
+                <div class="content">
+                    <h3>Couple Cat</h3>
+                    <p class="old-price">Rs.3,200.00 NPR</p>
+                    <p class="new-price">Rs.2,800.00 NPR</p>
+                </div>
+        </div>
+
+        <div class="card">
+            <div class="sale">Sale</div>
+                <img src="photos/brownbag.png">
+                <div class="content">
+                    <h3>Cute Brown Tote Bag</h3>
+                    <p class="old-price">Rs.3,200.00 NPR</p>
+                    <p class="new-price">Rs.2,800.00 NPR</p>
+                </div>
+        </div>
+
+        <div class="card">
+            <div class="sale">Sale</div>
+                <img src="photos/football pillow.png">
+                <div class="content">
+                    <h3>Football Pillow</h3>
+                    <p class="old-price">Rs.3,200.00 NPR</p>
+                    <p class="new-price">Rs.2,800.00 NPR</p>
+                </div>
+        </div>
+    </div>
+
+    <div class="about-me">
+        <div id="inner-container">
+            <div id="photo-container">
+                <img src="us.jpeg" alt="" id="photo">
+                <div id="story">
+                    <h2>Our Story</h2>
+                    <center><p>Hello Cuties(⁠｡⁠•̀⁠ᴗ⁠-⁠)⁠✧</p></center>
+                    <p>Starting the bachelors, we started crocheting making cute keychains, charms and other stuff. We took joy in making gifts for our friends. Crocheting helped us find peace in everyday bustling life.
+                        So, we started a crochet store where we can share our joy and comfort with you. <br><br>
+                        Handmade with love. <br>
+                        Inspired by creativity. <br>
+                        Created for you<i class="fa-solid fa-heart fa-beat" style="color: #f7a6c9;"></i>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- <div class="yarn-lines">
+
+    </div> -->
+
+    <h2>AMIGURUMI <span class="pointer" onclick="result()">→</span></h2>
+    <div class="wrapper">
+        <button class="nav prev" onclick="slide(-1,this)">❮</button>
+        <div class="carousel" >
+
+            <div class="product-card">
+                <img src="https://via.placeholder.com/250x200" alt="">
+                <div class="info">
+                    <h4>Teddy Bear pattern</h4>
+                    <p class="price">NPR 350</p>
+                    <button class="buy-btn" onclick="buy('Teddy Bear Pattern')">Add to Cart</button>
+                </div>
+            </div>
+
+            <div class="product-card">
+                <img src="https://via.placeholder.com/250x200" alt="">
+                <div class="info">
+                    <h4>Mini Bunny</h4>
+                    <p class="price">NPR 300</p>
+                    <button class="buy-btn" onclick="buy('Mini Bunny')">Add to Cart</button>
+                </div>
+            </div>
+
+            <div class="product-card">
+                <img src="https://via.placeholder.com/250x200" alt="">
+                <div class="info">
+                    <h4>Octopus Plushie</h4>
+                    <p class="price">NPR 280</p>
+                    <button class="buy-btn" onclick="buy('Octopus Plushie')">Add to Cart</button>
+                </div>
+            </div>
+
+            <div class="product-card">
+                <img src="https://via.placeholder.com/250x200" alt="">
+                <div class="info">
+                    <h4>Chibi Dinosaur</h4>
+                    <p class="price">NPR 400</p>
+                    <button class="buy-btn" onclick="buy('Chibi Dinosaur')">Add to Cart</button>
+                </div>
+            </div>
+
+            <div class="product-card">
+                <img src="https://via.placeholder.com/250x200" alt="">
+                <div class="info">
+                    <h4>Teddy Bear pattern</h4>
+                    <p class="price">NPR 350</p>
+                    <button class="buy-btn" onclick="buy('Tessy Bear Pattern')">Add to Cart</button>
+                </div>
+            </div>
+
+            <div class="product-card">
+                <img src="https://via.placeholder.com/250x200" alt="">
+                <div class="info">
+                    <h4>Chibi Dinosaur</h4>
+                    <p class="price">NPR 400</p>
+                    <button class="buy-btn" onclick="buy('Chibi Dinosaur')">Add to Cart</button>
+                </div>
+            </div>
+        </div>
+        <button class="nav next" onclick="slide(1,this)">❯</button>
+    </div>
+    
+
+<!-- ====================wearables====================== -->
+    <h2>WEARABLES <span class="pointer" onclick="result()">→</span></h2>
+    <div class="wrapper">
+        <button class="nav prev" onclick="slide(-1,this)">❮</button>
+        <div class="carousel">
+
+            <div class="product-card">
+                <img src="https://via.placeholder.com/250x200" alt="">
+                <div class="info">
+                    <h4>Cardigan</h4>
+                    <p class="price">NPR 850</p>
+                    <button class="buy-btn" onclick="buy('Teddy Bear Pattern')">Add to Cart</button>
+                </div>
+            </div>
+
+            <div class="product-card">
+                <img src="https://via.placeholder.com/250x200" alt="">
+                <div class="info">
+                    <h4>Beanie</h4>
+                    <p class="price">NPR 630</p>
+                    <button class="buy-btn" onclick="buy('Mini Bunny')">Add to Cart</button>
+                </div>
+            </div>
+
+            <div class="product-card">
+                <img src="https://via.placeholder.com/250x200" alt="">
+                <div class="info">
+                    <h4>Aesthetic Bag</h4>
+                    <p class="price">NPR 1120</p>
+                    <button class="buy-btn" onclick="buy('Octopus Plushie')">Add to Cart</button>
+                </div>
+            </div>
+
+            <div class="product-card">
+                <img src="https://via.placeholder.com/250x200" alt="">
+                <div class="info">
+                    <h4>Handwarmers</h4>
+                    <p class="price">NPR 400</p>
+                    <button class="buy-btn" onclick="buy('Chibi Dinosaur')">Add to Cart</button>
+                </div>
+            </div>
+
+            <div class="product-card">
+                <img src="https://via.placeholder.com/250x200" alt="">
+                <div class="info">
+                    <h4>Misasa Sacrf</h4>
+                    <p class="price">NPR 950</p>
+                    <button class="buy-btn" onclick="buy('Tessy Bear Pattern')">Add to Cart</button>
+                </div>
+            </div>
+
+            <div class="product-card">
+                <img src="https://via.placeholder.com/250x200" alt="">
+                <div class="info">
+                    <h4>Crop Top</h4>
+                    <p class="price">NPR 600</p>
+                    <button class="buy-btn" onclick="buy('Chibi Dinosaur')">Add to Cart</button>
+                </div>
+            </div>
+        </div>
+        <button class="nav next" onclick="slide(1,this)">❯</button>
+    </div>
+
+    <!-- ====================decor========================= -->
+    <h2>DECORS <span class="pointer" onclick="result()">→</span></h2>
+    <div class="wrapper">
+        <button class="nav prev" onclick="slide(-1,this)">❮</button>
+        <div class="carousel">
+
+            <div class="product-card">
+                <img src="https://via.placeholder.com/250x200" alt="">
+                <div class="info">
+                    <h4>Teddy Bear pattern</h4>
+                    <p class="price">NPR 350</p>
+                    <button class="buy-btn" onclick="buy('Teddy Bear Pattern')">Add to Cart</button>
+                </div>
+            </div>
+
+            <div class="product-card">
+                <img src="https://via.placeholder.com/250x200" alt="">
+                <div class="info">
+                    <h4>Mini Bunny</h4>
+                    <p class="price">NPR 300</p>
+                    <button class="buy-btn" onclick="buy('Mini Bunny')">Add to Cart</button>
+                </div>
+            </div>
+
+            <div class="product-card">
+                <img src="https://via.placeholder.com/250x200" alt="">
+                <div class="info">
+                    <h4>Octopus Plushie</h4>
+                    <p class="price">NPR 280</p>
+                    <button class="buy-btn" onclick="buy('Octopus Plushie')">Add to Cart</button>
+                </div>
+            </div>
+
+            <div class="product-card">
+                <img src="https://via.placeholder.com/250x200" alt="">
+                <div class="info">
+                    <h4>Chibi Dinosaur</h4>
+                    <p class="price">NPR 400</p>
+                    <button class="buy-btn" onclick="buy('Chibi Dinosaur')">Add to Cart</button>
+                </div>
+            </div>
+
+            <div class="product-card">
+                <img src="https://via.placeholder.com/250x200" alt="">
+                <div class="info">
+                    <h4>Teddy Bear pattern</h4>
+                    <p class="price">NPR 350</p>
+                    <button class="buy-btn" onclick="buy('Tessy Bear Pattern')">Add to Cart</button>
+                </div>
+            </div>
+
+            <div class="product-card">
+                <img src="https://via.placeholder.com/250x200" alt="">
+                <div class="info">
+                    <h4>Chibi Dinosaur</h4>
+                    <p class="price">NPR 400</p>
+                    <button class="buy-btn" onclick="buy('Chibi Dinosaur')">Add to Cart</button>
+                </div>
+            </div>
+        </div>
+        <button class="nav next" onclick="slide(1,this)">❯</button>
+    </div>
+
+    
+<!-- ==========================CHARACTERS==================== -->
+    <h2>CHARACTERS <span class="pointer" onclick="result()">→</span></h2>
+    <div class="wrapper">
+        <button class="nav prev" onclick="slide(-1,this)">❮</button>
+        <div class="carousel">
+
+            <div class="product-card">
+                <img src="https://via.placeholder.com/250x200" alt="">
+                <div class="info">
+                    <h4>Teddy Bear pattern</h4>
+                    <p class="price">NPR 350</p>
+                    <button class="buy-btn" onclick="buy('Teddy Bear Pattern')">Add to Cart</button>
+                </div>
+            </div>
+
+            <div class="product-card">
+                <img src="https://via.placeholder.com/250x200" alt="">
+                <div class="info">
+                    <h4>Mini Bunny</h4>
+                    <p class="price">NPR 300</p>
+                    <button class="buy-btn" onclick="buy('Mini Bunny')">Add to Cart</button>
+                </div>
+            </div>
+
+            <div class="product-card">
+                <img src="https://via.placeholder.com/250x200" alt="">
+                <div class="info">
+                    <h4>Octopus Plushie</h4>
+                    <p class="price">NPR 280</p>
+                    <button class="buy-btn" onclick="buy('Octopus Plushie')">Add to Cart</button>
+                </div>
+            </div>
+
+            <div class="product-card">
+                <img src="https://via.placeholder.com/250x200" alt="">
+                <div class="info">
+                    <h4>Chibi Dinosaur</h4>
+                    <p class="price">NPR 400</p>
+                    <button class="buy-btn" onclick="buy('Chibi Dinosaur')">Add to Cart</button>
+                </div>
+            </div>
+
+            <div class="product-card">
+                <img src="https://via.placeholder.com/250x200" alt="">
+                <div class="info">
+                    <h4>Teddy Bear pattern</h4>
+                    <p class="price">NPR 350</p>
+                    <button class="buy-btn" onclick="buy('Tessy Bear Pattern')">Add to Cart</button>
+                </div>
+            </div>
+
+            <div class="product-card">
+                <img src="https://via.placeholder.com/250x200" alt="">
+                <div class="info">
+                    <h4>Chibi Dinosaur</h4>
+                    <p class="price">NPR 400</p>
+                    <button class="buy-btn" onclick="buy('Chibi Dinosaur')">Add to Cart</button>
+                </div>
+            </div>
+        </div>
+        <button class="nav next" onclick="slide(1,this)">❯</button>
+    </div>
+
+<!-- ===================KEYCHAINS======================== -->
+    <h2>KEYCHAINS <span class="pointer" onclick="result()">→</span></h2>
+    <div class="wrapper">
+        <button class="nav prev" onclick="slide(-1,this)">❮</button>
+        <div class="carousel">
+
+            <div class="product-card">
+                <img src="https://via.placeholder.com/250x200" alt="">
+                <div class="info">
+                    <h4>Teddy Bear pattern</h4>
+                    <p class="price">NPR 350</p>
+                    <button class="buy-btn" onclick="buy('Teddy Bear Pattern')">Add to Cart</button>
+                </div>
+            </div>
+
+            <div class="product-card">
+                <img src="https://via.placeholder.com/250x200" alt="">
+                <div class="info">
+                    <h4>Mini Bunny</h4>
+                    <p class="price">NPR 300</p>
+                    <button class="buy-btn" onclick="buy('Mini Bunny')">Add to Cart</button>
+                </div>
+            </div>
+
+            <div class="product-card">
+                <img src="https://via.placeholder.com/250x200" alt="">
+                <div class="info">
+                    <h4>Octopus Plushie</h4>
+                    <p class="price">NPR 280</p>
+                    <button class="buy-btn" onclick="buy('Octopus Plushie')">Add to Cart</button>
+                </div>
+            </div>
+
+            <div class="product-card">
+                <img src="https://via.placeholder.com/250x200" alt="">
+                <div class="info">
+                    <h4>Chibi Dinosaur</h4>
+                    <p class="price">NPR 400</p>
+                    <button class="buy-btn" onclick="buy('Chibi Dinosaur')">Add to Cart</button>
+                </div>
+            </div>
+
+            <div class="product-card">
+                <img src="https://via.placeholder.com/250x200" alt="">
+                <div class="info">
+                    <h4>Teddy Bear pattern</h4>
+                    <p class="price">NPR 350</p>
+                    <button class="buy-btn" onclick="buy('Tessy Bear Pattern')">Add to Cart</button>
+                </div>
+            </div>
+
+            <div class="product-card">
+                <img src="https://via.placeholder.com/250x200" alt="">
+                <div class="info">
+                    <h4>Chibi Dinosaur</h4>
+                    <p class="price">NPR 400</p>
+                    <button class="buy-btn" onclick="buy('Chibi Dinosaur')">Add to Cart</button>
+                </div>
+            </div>
+        </div>
+        <button class="nav next" onclick="slide(1,this)">❯</button>
+    </div>
+
+    <!-- pop up cart -->
+    <div class="modal" id="cartModal">
+        <div class="modal-content">
+            <button onclick="closeModal()" id="closed">✕</button>
+            <div id="bear-icon">🧸</div>
+            <h3>⋆｡‧˚ʚAdded to the Cartɞ˚‧｡⋆</h3>
+            <p id="productname"></p>
+            <button class="checkout" onclick="checkout()">
+                Go to Checkout
+            </button>
+        </div>
+    </div>
+
+    <div class="browse">
+        <p>Browse to other categories<span class="pointer" onclick="result()">→</span></p>
+    </div>
+<!-- ==================collection========================= -->
+    <div class="collections">
+        <div class="col-grid">
+            <!-- box 1 -->
+            <div class="collection-box">
+                <h2>Free Patterns</h2>
+                <div class="image-grid">
+                    <div class="image-item">
+                        <div class="pdf">PDF</div>
+                        <img src="https://via.placeholder.com/" alt="">
+                        <p>Teddy Bear</p>
+                       
+                    </div>
+
+                    <div class="image-item">
+                        <div class="pdf">PDF</div>
+                        <img src="https://via.placeholder.com/" alt="">
+                        <p>Bunny Plush</p>
+                    </div>
+
+                    <div class="image-item">
+                        <div class="pdf">PDF</div>
+                        <img src="https://via.placeholder.com/" alt="">
+                        <p>Unicorn</p>
+                    </div>
+
+                    <div class="image-item">
+                        <div class="pdf">PDF</div>
+                        <img src="https://via.placeholder.com/" alt="">
+                        <p>Dinosaur</p>
+                    </div>
+                </div>
+                <a href="#" class="see-more">See More →</a>
+            </div>
+            <!-- box 2   -->
+             <div class="collection-box">
+                <h2>Yarn Collections</h2>
+                <div class="image-grid">
+                    <div class="image-item">
+                       
+                        <img src="https://via.placeholder.com/" alt="">
+                        <p>Teddy Bear</p>
+                       
+                    </div>
+
+                    <div class="image-item">
+                        
+                        <img src="https://via.placeholder.com/" alt="">
+                        <p>Bunny Plush</p>
+                    </div>
+
+                    <div class="image-item">
+                       
+                        <img src="https://via.placeholder.com/" alt="">
+                        <p>Unicorn</p>
+                    </div>
+
+                    <div class="image-item">
+                        
+                        <img src="https://via.placeholder.com/" alt="">
+                        <p>Dinosaur</p>
+                    </div>
+                </div>
+                <a href="#" class="see-more">See More →</a>
+            </div>
+
+            <!-- box 3 -->
+             <div class="collection-box">
+                <h2>Hook Sizes</h2>
+                <div class="image-grid">
+                    <div class="image-item">
+                        
+                        <img src="https://via.placeholder.com/" alt="">
+                        <p>Teddy Bear</p>
+                       
+                    </div>
+
+                    <div class="image-item">
+                       
+                        <img src="https://via.placeholder.com/" alt="">
+                        <p>Bunny Plush</p>
+                    </div>
+
+                    <div class="image-item">
+                       
+                        <img src="https://via.placeholder.com/" alt="">
+                        <p>Unicorn</p>
+                    </div>
+
+                    <div class="image-item">
+                        
+                        <img src="https://via.placeholder.com/" alt="">
+                        <p>Dinosaur</p>
+                    </div>
+                </div>
+                <a href="#" class="see-more">See More →</a>
+            </div>
+            <!-- box 4 -->
+             <div class="collection-box">
+                <h2>Free Patterns</h2>
+                <div class="image-grid">
+                    <div class="image-item">
+                        
+                        <img src="https://via.placeholder.com/" alt="">
+                        <p>Teddy Bear</p>
+                       
+                    </div>
+
+                    <div class="image-item">
+                       
+                        <img src="https://via.placeholder.com/" alt="">
+                        <p>Bunny Plush</p>
+                    </div>
+
+                    <div class="image-item">
+
+                        <img src="https://via.placeholder.com/" alt="">
+                        <p>Unicorn</p>
+                    </div>
+
+                    <div class="image-item">
+                        
+                        <img src="https://via.placeholder.com/" alt="">
+                        <p>Dinosaur</p>
+                    </div>
+                </div>
+                <a href="#" class="see-more">See More →</a>
+            </div>
+            
+        </div>
+    </div>
+
+    <!-- =============chatbot=============== -->
+     <button class="bot-icon" id="botIcon">
+       <i class="fa-solid fa-message fa-2xl" style="color: rgb(251, 251, 251);"></i>
+     </button>
+
+    <div class="chatbot-window" id="chatbotWindow">
+        <div class="bot-header">
+            <h3>CROCHET HELPER</h3>
+            <p>Ask away your doubts!</p>
+        </div>
+
+        <div class="bot-messages" id="chatbotMessages">
+            <div class="message bot">
+                <div class="avatar">🧸</div>
+                <div class="message-content">
+                    Hi there! I am your crochet assistant. How can I help you today?
+                </div>
+            </div>
+            <div class="typing-indicator" id="typingIndicator">
+                <div class="typing-dot"></div>
+                <div class="typing-dot"></div>
+                <div class="typing-dot"></div>
+            </div>
+        </div>
+        <div class="suggestions" id="suggestions">
+            <button class="suggestion-btn" onclick="quickReply('Free Patterns')">Free Patterns</button>
+            <button class="suggestion-btn" onclick="quickReply('Beginner Tips')">Beginner Tips</button>
+            <button class="suggestion-btn" onclick="quickReply('Yarn Guide')">Yarn Guide</button>
+        </div>
+        <div class="user-inputBox">
+            <input type="text" id="userInputBox" placeholder="Type your message here..." onkeypress="handleKeyPress(event)">
+            <button onclick="sendMessage()">➤</button>
+        </div>
+    </div>
+        
+     <!-- in checkout put the option of message box to write a personal message -->
+      <!-- ==============footer==================== -->
+    <footer>
+        <div class="footer-container">
+            <div class="newsletter">
+                <h3>Stay  Updated! <i class="fa-solid fa-envelope"></i></h3>
+                <p>Get Free patterns and crochet tips delivered to your inbox! ^^</p>
+                <form action="post" class="mail">
+                    <input type="email" name="Email" id="" placeholder="Your email address" required/>
+                    <button type="submit">Subscribe</button>
+                </form>
+            </div>
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>ABOUT</h3>
+                    <ul>
+                        <li><a href="#">About Us</a></li>
+                        <li><a href="#">Contact Us</a></li>
+                        <li> <a href="#">Support</a></li>
+                        <li><a href="#">Help Center</a></li>
+                    </ul>  
+                </div>
+
+                <div class="footer-section">
+                    <h3>LEARN</h3>
+                    <ul>
+                        <li><a href="#">Tools Required</a></li>
+                        <li><a href="#">Beginner Tutorials</a></li>
+                        <li><a href="#">Video Guides</a></li>
+                        <li><a href="#">Blog</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-section">
+                    <h3>SUPPORT</h3>
+                    <ul>
+                        <li><a href="#">Contact Us</a></li>
+                        <li><a href="#">FAQs</a></li>
+                        <li><a href="#">Shipping Info</a></li>
+                        <li><a href="#">Return Policy</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-section">
+                    <h3>LEGAL</h3>
+                    <ul>
+                        <li><a href="#">Terms and Condition</a></li>
+                        <li><a href="#">Cookie Policy</a></li>
+                        <li><a href="#">Cookie Setting</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">General Product Safety Return</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-section">
+                    
+                    <h3>CONNECT WITH US</h3>
+                    <div class="social-links"></div>
+                        <a href="#"><i class="fa-brands fa-instagram fa-xl"></i></i></a>
+                        <a href="#"><i class="fa-brands fa-facebook fa-xl"></i></a>
+                        <a href="#"><i class="fa-brands fa-youtube fa-xl"></i></a>
+                        <a href="#"><i class="fa-brands fa-pinterest fa-xl"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="bottom">
+                <p>Made with Love and Care by Yarnify &copy; 2025</p>
+            </div>
+        </div>
+    </footer>
+    <script src="script.js"></script>
+</body>
+</html>
