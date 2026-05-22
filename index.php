@@ -1,5 +1,13 @@
 <?php
 session_start();
+if (isset($_SESSION['login_time'])) {
+    if ((time() - $_SESSION['login_time']) > $_SESSION['expire_time']) {
+        session_unset();
+        session_destroy();
+        header("Location: login.php");
+        exit();
+    }
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -34,7 +42,15 @@ session_start();
                         <div class="search-results" id="searchResults"></div>
                     </li>
                     
-                    <li><a href="login.php"><i class="fa-regular fa-user" title="user" id="userIcon"></i></a></li>
+                    <li class="user-menu">
+                        <?php if (isset($_SESSION['logged_in'])): ?>
+                            <i class="fa-solid fa-user-check" id="userIcon" title="<?php echo $_SESSION['user_email']; ?>"></i>
+                        <?php else: ?>
+                            <a href="login.php">
+                                <i class="fa-regular fa-user" title="user"></i>
+                            </a>
+                        <?php endif; ?>
+                    </li>
                     <li><i class="fa-solid fa-bag-shopping" title="cart"></i></li>
                 </ul>
                 </div>

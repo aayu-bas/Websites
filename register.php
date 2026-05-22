@@ -46,7 +46,7 @@ if (isset($_POST['submit'])) {
             }
         }
     }
-}
+  }
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -62,7 +62,9 @@ if (isset($_POST['submit'])) {
 
 *{
   font-family: "Lilita One", sans-serif;
-  margin:0; padding:0; box-sizing:border-box;
+  margin:0; 
+  padding:0; 
+  box-sizing:border-box;
 }
 
 body{

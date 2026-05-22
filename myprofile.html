@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile -Yarnify</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="icon" href="yarnify.png">
+    <style>
+    @import url('https://fonts.googleapis.com/css2?family=Lilita+One&family=Pacifico&display=swap');
+        *{
+            font-family: "Lilita One", sans-serif;
+            margin:0; 
+            padding:0; 
+            box-sizing:border-box;
+        }
+        body{
+            background: linear-gradient(135deg, #fde2e4,#ffffff);
+            height:100vh;
+        }
+        .profile-container{
+            display: flex;
+            padding-top: 50px;
+        }
+        .left-container{
+            width: 320px;
+            background: rgba(255, 192, 192,0.5);
+            border-radius: 5px;
+            padding: 50px 30px 20px 30px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            text-align: center;
+            position: absolute;
+            left: 12%;
+        }
+        .prev{
+            position: relative;
+            right:40%;
+            margin:0 10px 50px 0;
+            
+        }
+        .profile-pic{
+            position: relative;
+            width: 150px;
+            height:150px;
+            align-items: center;
+            margin: auto;
+        }
+        .profile-pic img{
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+            /* border: 2px solid #ffffff; */
+        }
+        .upload{
+            padding-top: 12px;
+            margin-top:10px;
+        }
+        .upload input{
+            display: none;
+        }
+        .upload label{
+            background: #ff9ecb;
+            color: white;
+            padding: 8px 14px;
+            cursor: pointer;
+            border-radius: 20px;
+            font-size: 20px;
+        }
+        .right-container{ 
+            position: relative;
+            display: flex;
+            left: 120%;
+            width: 500px;
+            background: #ffffff;
+            border-radius: 5px;
+            padding: 30px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            text-align: right;
+        }
+
+        .user-info{
+            position: relative;
+            right:18%;
+        }
+        .name{
+            margin:auto;
+            border-radius: 5px;
+            padding: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            background: rgb(241, 220, 220);
+        }
+        input{
+            border-radius: 5px;
+            
+        }
+    </style>
+</head>
+<body>
+    <div class="profile-container">
+        <div class="left-container">
+            <div class="prev">
+                <i class="fa fa-arrow-circle-left" style="font-size:36px; color:rgb(216, 145, 195);"></i>
+            </div>
+            <div class="profile-pic">
+                <img src="photos/profile.png" alt="Profile Picture" id="profileImage">
+            </div>
+            <div class="upload">
+                <input type="file" id="imageUpload" accept="image/*">
+                <label for="imageUpload">Upload Picture</label>
+            </div>
+            <div class="right-container">
+                <div class="user-info">
+                    <h1>My Profile</h1>
+                    <form action=" "method="POST">
+                        <div class="name">
+                            <label for="FirstName">First Name: </label>
+                            <input type="text" name="" id="">
+                        </div>
+                        
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        const imageUpload = document.getElementById("imageUpload");
+        const profileImage = document.getElementById("profileImage");
+        imageUpload.onchange= function(){
+            profileImage.src= URL.createObjectURL(imageUpload.files[0]);
+        }
+    </script>
+</body>
+</html>
