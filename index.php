@@ -44,7 +44,21 @@ if (isset($_SESSION['login_time'])) {
                     
                     <li class="user-menu">
                         <?php if (isset($_SESSION['logged_in'])): ?>
-                            <i class="fa-solid fa-user-check" id="userIcon" title="<?php echo $_SESSION['user_email']; ?>"></i>
+                            <div class="user-dropdown">
+                                <i class="fa-solid fa-user-check" id="userIcon" title="<?php echo $_SESSION['user_email']; ?>"></i>
+                                <div class="dropdown-menu" id="dropdownMenu">
+                                    <a href="myprofile.php">
+                                         <i class="fa-solid fa-user"></i>My Profile
+                                    </a>
+                                    <a href="settings.php">
+                                        <i class="fa-solid fa-gear"></i>Settings
+                                    </a>
+                                    <a href="logsout.php">
+                                       <i class="fa-solid fa-right-from-bracket"></i> Logout
+                                    </a>
+                                </div>
+                            </div>
+                            
                         <?php else: ?>
                             <a href="login.php">
                                 <i class="fa-regular fa-user" title="user"></i>

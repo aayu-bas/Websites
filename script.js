@@ -27,6 +27,15 @@ function showSlides(n) {
   dots[slideIndex-1].className += " active";
 }
 
+// --------------DropDown Menu------------
+const userIcon = document.getElementById("userIcon");
+const dropdownMenu= document.getElementById("dropdownMenu");
+
+userIcon.addEventListener("click",()=>{
+  dropdownMenu.classList.toggle("show-menu");
+});
+
+
 // --------------ProductSlider------------
 function closeModal(){
   document.getElementById("cartModal").style.display="none";

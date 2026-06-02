@@ -135,7 +135,6 @@ width: 100%;
   cursor: pointer;
 }
 
-
 .search-results {
   display: none;
   position: absolute;
@@ -207,7 +206,46 @@ width: 100%;
   color: rgb(254, 127, 148);
   cursor: pointer;
 }
-
+.user-menu{
+  list-style:none;
+  position:relative;
+}
+.user-dropdown{
+  position:relative;
+  display:inline-block;
+}
+.dropdown-menu{
+  position:absolute;
+  top:35px;
+  background: #fffff2;
+  border-radius: 8px;
+  z-index:1000;
+  right:0;
+  min-width:180px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  overflow:hidden;
+  display: none;
+  
+}
+.dropdown-menu a{
+  display:block;
+  padding:12px 15px;
+  text-decoration: none;
+  transition:transform 0.3s;
+  color:black;
+}
+.dropdown-menu a:hover{
+  transform: translateX(3px);
+}
+.dropdown-menu a i{
+  margin-right: 12px;
+}
+.dropdown-menu a:hover{
+  text-decoration: none;
+}
+.show-menu{
+  display: block;
+}
 .fa-bag-shopping{
   font-size: 20px;
   color: rgb(254, 127, 148);
