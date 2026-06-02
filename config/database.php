@@ -27,5 +27,34 @@ function getDBConnection(){
     return $pdo;
 }
 
+// a helper function for the prepared statement
+function executeQuery($sql, $params = []){
+    $pdo= getDBConnection();
+    $stmt= $pdo->prepare($sql);
+    $stmt->execute($params);
+    return stmt;
+}
 
+//fetches a single row
+function fetchOne($sql, $params=[]){
+    $stmt= executeQuery($sql, $params);
+    return $stmt->fetch();
+}
+
+//to fetch all the rows
+function fetchAll($sql, $params = []) {
+    $stmt = executeQuery($sql, $params);
+    return $stmt->fetchAll();
+}
+
+// to get last insert ID
+function lasInsertID(){
+    return getDBConnection()->lasInsertID();
+}
+
+//to get row count
+function rowCount($sql, $params = []) {
+    $stmt = executeQuery($sql, $params);
+    return $stmt->rowCount();
+}
 ?>
