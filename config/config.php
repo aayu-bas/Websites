@@ -20,7 +20,27 @@ define('CSRF_TOKEN_NAME', 'yarnify_csrf_token')
 
 //Pagination
 define('PRODUCTS_PER_PAGE',12);
-define('PRODUCTS_PER_PAGE',10);
+define('ORDERS_PER_PAGE',10);
+
+
+//function to generate csrf token
+function generateCSRFToken(){
+    if(empty($_SESSION['CSRF_TOKEN_NAME'])){
+        $_SESSION[CSRF_TOKEN_NAME]= bin2hex(random_bytes(32));
+    }
+    return $_SESSION[CSRF_TOKEN_NAME];
+}
+
+//verify CSRF token
+function verifyCSRFToken($token){
+    return isset($SESSION[CSRF_TOKEN_NAME]) && hash_equals($SESSION[CSRF_TOKEN_NAME],$token);
+}
+
+//get CSRF token input field
+function csrfField(){
+    $token = generateCSRFToken();
+    return '<input type="hidden" name="'.CSRF_TOKEN_NAME. '"value="'.htmlspecialchars($token). '">';
+}
 
 function redirect($url){
     header("Location: ". $url);
@@ -38,4 +58,40 @@ function getFlashMessage(){
     return $messages;
 }
 
+//check if user is logged in
+function isLoggedIn(){
+    return isset($_SESSION['user_id'])&& !empty($_SESSION['user_id']);
+}
 
+//check if admin is logged in
+function isAdminLoggedIn(){
+    return isset($_SESSION['admin_id']) && !empty($_SESSION['admin_id']);
+}
+
+//get current user ID
+function getCurrentUserId(){
+    return $_SESSION['user_id']??null;
+}
+
+// Get current admin ID
+function getCurrentUserId(){
+    return $_SESSION['admin_id']??null;
+}
+
+//require login
+function requireLogin(){
+    if(!isLoggedIn()){
+        setFlashMessage('warning', 'Please Login to continue.');
+        redirect(SITE_URL, 'login.php'); //might need to change
+    }
+}
+
+//require admin Login
+function requireAdminLogin(){
+    if(!isAdminLoggedIn()){
+        setFlashMessage('warning', 'Please Login as admin to continue.');
+        redirect(SITE_URL, 'login.php');
+    }
+}
+
+?>
