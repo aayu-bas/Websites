@@ -117,19 +117,5 @@ $extraCSS = '<link rel="stylesheet" href="' . ASSETS_URL . '/css/auth.css">';
             </div>
         </div>
 </div>
-    <script>
-        function togglePassword(){
-            const passwordInput = document.getElementById("password")
-            const eyeIcon= document.querySelector(".eye-icon")
-
-            if(passwordInput.type=== "password"){
-                passwordInput.type="text"
-                eyeIcon.innerHTML=`<i class="fa fa-eye-slash"></i>`
-            } else{
-                passwordInput.type="password"
-                eyeIcon.innerHTML=`<i class='far fa-eye'></i>`
-            }
-        }
-    </script>
 </body>
 </html>
