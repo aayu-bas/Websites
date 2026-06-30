@@ -148,4 +148,12 @@ function uploadImage($file, $destinationPath, $prefix = ''){
     return ['success' => false, 'error' => 'Failed to upload file.'];
 }
 
+//delete image file
+function deleteImage($filename, $path){
+    $filepath=$path . $filename;
+    if(file_exists($filepath)){
+        return unlink($filepath);
+    }
+    return false;
+}
 ?>
