@@ -20,8 +20,8 @@ function getDBConnection(){
             ];
             $pdo= new PDO($dsn, User, Pass, $options);
         }catch(PDOException $e){
-            error_log("Database Connection Error: "$e->getMessage());
-            die("Database connectin failed. Please check your configuration.");
+            error_log("Database Connection Error: ".$e->getMessage());
+            die("Database connection failed. Please check your configuration.");
         }
     }
     return $pdo;
