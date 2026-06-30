@@ -1,54 +1,3 @@
-<?php
-include 'connect.php';
-
-$error = '';
-
-if (isset($_POST['submit'])) {
-    $email = $_POST['email'];
-    $password = $_POST['password'];
-
-    if (empty($email) || empty($password)) {
-        $error = 'Please enter both email and password';
-    } 
-    else {
-        $query = "SELECT * FROM users WHERE email='$email'";
-        $result = mysqli_query($conn, $query);
-        
-        if (mysqli_num_rows($result) == 1) {
-            $user = mysqli_fetch_assoc($result);
-
-            if (password_verify($password, $user['password'])) {
-                $_SESSION['user_id'] = $user['id'];
-                $_SESSION['user_email'] = $user['email'];
-                $_SESSION['logged_in'] = true;
-
-                if (isset($_POST['remember_me'])) {
-                    setcookie('user_email', $email, time() + (30 * 24 * 60 * 60), '/');
-                }
-
-                header("Location: index.php");
-                exit();
-            } else {
-                $error = 'Invalid email or password';
-            }
-        } else {
-            $error = 'Invalid email or password';
-        }
-    }
-}
-
-// Check if user is already logged in
-// if (isset($_SESSION['logged_in']) && $_SESSION['logged_in'] == true) {
-//     header("Location: index.php");
-//     exit();
-// }
-
-// Pre-fill email from cookie if it exists
-$remembered_email = '';
-if (isset($_COOKIE['user_email'])) {
-    $remembered_email = $_COOKIE['user_email'];
-}
-?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -56,7 +5,10 @@ if (isset($_COOKIE['user_email'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login to Yarnify</title>
     <link rel="icon" href="yarnify.png">
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Lilita+One&family=Pacifico&family=Sono:wght,MONO@200..800,1&display=swap');
         *{
@@ -69,12 +21,13 @@ if (isset($_COOKIE['user_email'])) {
         }
         body{
            background: linear-gradient(135deg, #fde2e4,#fff1c1,#e6f4ea);
+       /* rgb(255, 255, 182); */
         }
         .login-container{
         display: flex;
         align-items: center;
         justify-content: center;
-        min-height: 100vh;
+        height: 100vh;
         padding: 20px;
         }
         .form-container{
@@ -89,7 +42,7 @@ if (isset($_COOKIE['user_email'])) {
         display: flex;
         flex-direction: column;
         gap: 20px;
-        box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        max-height: 95vh;
         }
 
         .form-header p{
@@ -98,12 +51,10 @@ if (isset($_COOKIE['user_email'])) {
         font-family: "Pacifico", cursive;
         font-weight: 400;
         font-style: normal;
-        text-align: center;
+        margin-left: 80px;
         }     
         .form-header h1{
-            font-size: 32px;
-            text-align: center;
-            color: #614c37;
+            font-size: 32px;   
         }   
 
         .form-box{
@@ -126,13 +77,34 @@ if (isset($_COOKIE['user_email'])) {
         }
 
         #password{
-            padding-right: 40px;
+            padding-right: 30px;
+        }
+        .floating-label{
+            position: absolute;
+            top:40%;
+            left:8px;
+            transform:translateY(-50%);
+            color:rgb(188, 188, 188);
+            padding-inline: 6px;
+            transition: all 0.3s ease;
+            pointer-events: none;
+            z-index: 1000;
         }
 
+        .input-field:focus ~.floating-label, .input-field:not(:placeholder-shown)~.floating-label{
+            top:0;
+            left: 8px;
+            transform: translateY(-50%);
+            font-size: 14px;
+            color:rgb(103, 103, 103);
+            
+        }
         .input-field:focus{
             border-color:rgb(182, 253, 207);
         }
-
+        .input-field:not(:focus):not(:placeholder-shown)~floating-label{
+            color:beige;
+        }
         .eye-icon{
             position: absolute;
             right: 15px;
@@ -165,7 +137,7 @@ if (isset($_COOKIE['user_email'])) {
         }
         .form-btn{
             display: flex;
-            justify-content: center;
+            justify-self: center;
             align-items: center;
             gap:10px;
             height:48px;
@@ -176,10 +148,10 @@ if (isset($_COOKIE['user_email'])) {
         }
         .form-btn--submit{
             background-color: rgb(62, 124, 223);
-            width: 100%;
+            padding-inline: 150px;
             color: white;
             font-size: 16px;
-            transition: background-color 0.3s ease;
+            transition: background-color 0.3 ease;
         }
         .form-btn--submit:hover{
             background-color: rgb(30, 94, 245);
@@ -214,22 +186,20 @@ if (isset($_COOKIE['user_email'])) {
             gap:20px;
         }
         .form-btn--social{
+            /* border: 1px solid rgb(169, 169, 169); */
             transition: .3s ease;
-            background: white;
-            border: 1px solid #e0e0e0;
         }
         .form-btn--social:hover{
-            background-color: rgb(225, 225, 225);
+            background-color: rgb(228, 199, 247);
         }
         .btn-icon{
             width: 50px;
         }
         .form-link{
             color: #47a7f5;
-            text-decoration: none;
         }
         .form-link:hover{
-            text-decoration: underline;
+            text-decoration: none;
         }
         .form-blob{
             position: absolute;
@@ -278,24 +248,9 @@ if (isset($_COOKIE['user_email'])) {
                 transform: scale(1) translateX(0px) rotate(205deg);
             }
         }
-
-        /* Error message styling */
-        .error-message {
-            background: #ffe0e0;
-            color: #ff6b6b;
-            padding: 12px;
-            border-radius: 6px;
-            text-align: center;
-            font-size: 14px;
-            margin-bottom: 10px;
-        }
-
-        @media (max-width: 480px) {
+        @media (max-widtd: 480px) {
             .form-container{
                 padding: 60px 30px;
-            }
-            .form-header p {
-                font-size: 26px;
             }
         }
     </style>
@@ -312,60 +267,56 @@ if (isset($_COOKIE['user_email'])) {
                 <p>Yarnify</p>
                 <h1>Welcome Back</h1>
             </div>
-
-            <?php if ($error): ?>
-                <div class="error-message">
-                    <?php echo $error; ?>
-                </div>
-            <?php endif; ?>
-
-            <form class="form-box" method="POST">
+            <form class="form-box">
                 <div class="input-group">
-                    <input type="email" name="email" class="input-field" placeholder="Email address" required
-                           value="<?php echo $remembered_email; ?>">
+                    <input type="email" id="email" class="input-field" required>
+                    <label for="email" class="floating-label">Email address</label>
                 </div>
                 <div class="input-group">
-                    <input type="password" id="password" name="password" class="input-field" placeholder="Password" required>
+                    <input type="password" id="password" class="input-field" required>
+                    <label for="password" class="floating-label">Password</label>
                     <div class="eye-icon" onclick="togglePassword()">
                         <i class='far fa-eye'></i>
                     </div>
                 </div>
                 <div class="input-group checkbox-group">
                     <div class="form-col remember-me">
-                        <input type="checkbox" name="remember_me" class="checkbox-field">
-                        <label>Remember me</label>
+                        <input type="checkbox" id="remember-me-checkbox" class="checkbox-field">
+                        <label for="remember-me-checkbox">Remember me</label>
                     </div>
                     <div class="form-col">
                         <a href="#" class="form-link">Forgot Password?</a>
                     </div>
                 </div>
 
-                <button type="submit" name="submit" class="form-btn form-btn--submit">Sign In</button>
+                <button type="submit" class="form-btn form-btn--submit">Sign In</button>
             </form>
         <div class="form-divider">
             <p>Or</p>
         </div>
         <div class="form-bottom">
             <div class="form-socials">
-                <button type="button" class="form-btn form-btn--social">
+                <button class="form-btn form-btn--social">
                     <img src="login/google.png" alt="google icon" class="btn-icon">
                 </button>
 
-                <button type="button" class="form-btn form-btn--social">
+                <button class="form-btn form-btn--social">
                     <img src="login/facebook.png" alt="facebook icon" class="btn-icon">
                 </button>
 
-                <button type="button" class="form-btn form-btn--social">
+                <button class="form-btn form-btn--social">
                     <img src="login/apple.png" alt="apple icon" class="btn-icon">
                 </button>
                 </div>
 
-                <p style="text-align: center;">Don't have an account?
-                <a href="register.php" class="form-link">Sign up</a>
+                <p>Don't have an account?
+                <a href="#" class="form-link">Sign up</a>
                 </p>
             </div>
         </div>
     </div>
+        
+
     <script>
         function togglePassword(){
             const passwordInput = document.getElementById("password")

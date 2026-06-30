@@ -1,5 +1,4 @@
 <?php
-session_start();
 if (isset($_SESSION['login_time'])) {
     if ((time() - $_SESSION['login_time']) > $_SESSION['expire_time']) {
         session_unset();
@@ -8,6 +7,8 @@ if (isset($_SESSION['login_time'])) {
         exit();
     }
 }
+require_once __DIR__ . '/includes/header.php';
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -60,7 +61,7 @@ if (isset($_SESSION['login_time'])) {
                             </div>
                             
                         <?php else: ?>
-                            <a href="login.php">
+                            <a href="/pages/login.php">
                                 <i class="fa-regular fa-user" title="user"></i>
                             </a>
                         <?php endif; ?>

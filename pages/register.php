@@ -1,9 +1,13 @@
 <?php
-// register.php - Simple user registration
-include 'connect.php';
+ require_once __DIR__ . '/../config/config.php';
 
-$error = '';
-$success = '';
+ //redirect if already logged in
+ if(isLoggedIn()){
+    redirect(SITE_URL . '/index.php');
+ }
+
+$errors =[];
+
 
 // Handle form submission
 if (isset($_POST['submit'])) {
