@@ -19,10 +19,10 @@ define('ALLOWED_IMAGES_TYPES', ['images/jpeg', 'images/png', 'images/gif', 'imag
 define ('MAX_FILE_SIZE', 5*1024*1024); //5MB
 
 //session
-define('SESSION_LIFETIME', 3600) //1 hr
+define('SESSION_LIFETIME', 3600); //1 hr
 
 //security
-define('CSRF_TOKEN_NAME', 'yarnify_csrf_token')
+define('CSRF_TOKEN_NAME', 'yarnify_csrf_token');
 
 //Pagination
 define('PRODUCTS_PER_PAGE',12);
@@ -80,7 +80,7 @@ function getCurrentUserId(){
 }
 
 // Get current admin ID
-function getCurrentUserId(){
+function getCurrentAdminId(){
     return $_SESSION['admin_id']??null;
 }
 
