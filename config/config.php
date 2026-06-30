@@ -1,12 +1,18 @@
 <?php
 session_start();
 
-require_once__DIR__ . '/database.php';
-// require_once __DIR__ . '/database.php';
+require_once __DIR__ . '/database.php';
+
 
 //define site constants
 define('SITE_NAME', 'Yarnify');
 define ('SITE_URL', 'http://localhost/yarnify');
+
+//file upload paths
+define('UPLOAD_PATH', __DIR__ . '/../assets/images/uploads/');
+define('PRODUCT_IMAGE_PATH', __DIR__ . '/../assets/images/products/');
+define('CUSTOM_IMAGE_PATH', __DIR__ . '/../assets/images/custom/');
+define('SLIDER_IMAGE_PATH', __DIR__ . '/../assets/images/slider/');
 
 //allowed images types
 define('ALLOWED_IMAGES_TYPES', ['images/jpeg', 'images/png', 'images/gif', 'images/webg']);
@@ -92,6 +98,54 @@ function requireAdminLogin(){
         setFlashMessage('warning', 'Please Login as admin to continue.');
         redirect(SITE_URL, 'login.php');
     }
+}
+
+//sanitize input
+function sanitize($data){
+    return htmlspecialchars(strip_tags(trim($data)), ENT_QUOTES, 'UTF-8');
+}
+
+function formatPrice($price){
+    return 'रु'. number_format($price,2);
+}
+
+//generate unique order number for the customer
+function generateOrderNumber(){
+    return 'YNF-' . date('Ymd') . '-' . strtoupper(substr(uniqid(), -6));
+}
+
+function uploadImage($file, $destinationPath, $prefix = ''){
+    if(!isset($file['tmp_name']) || empty($file['tmp_name'])){
+        return['success'=>false, 'error'=> 'No file uploaded'];
+    }
+    //check file type
+    $finfo = finfo_open(FILEINFO_MIME_TYPE);
+    $mimeType = finfo_file($finfo, $file['tmp_name']);
+    finfo_close($finfo);
+
+    if(!in_array($mimeType, ALLOWED_IMAGE_TYPES)){
+        return['success'=> false, 'error'=> 'Invlaid file type. Ony JPG, PNG, GIF, and WEbP are allowed.'];
+    }
+
+    //check the file size
+    if($file['size']>MAX_FILE_SIZE){
+        return ['success'=> false, 'error'=> 'File too large. Maz=ximum size is 5MB.'];
+    
+    }
+    //generate unique file name
+    $extension = pathinfo($file['name'], PATHINFO_EXTENSION);
+    $filename = $prefix . uniqid() . '_' .  time() . '.' . $extension;
+    $filepath = $destinationPath. $filename;
+
+    //creating directory if not exists
+    if(!is_dir($destinationPath)){
+        mkdir($destinationPath, 0755, true);
+    }
+    //move uploaded file
+    if(move_uploaded_file($file['tmp_name'], $filepath)){
+        return['success'=> true, 'filename'=>$filename,  'path' =>$filepath];
+    }
+    return ['success' => false, 'error' => 'Failed to upload file.'];
 }
 
 ?>
