@@ -1,31 +1,35 @@
 
 // --------ImageSlider---------------
-let slideIndex = 1;
-showSlides(slideIndex);
+const slides = document.querySelectorAll('.slide');
+const nextBtn = document.querySelector('.next');
+const prevBtn = document.querySelector('.prev');
 
-function plusSlides(n) {
-  showSlides(slideIndex += n);
+let currentSlide = 0;
+
+function showSlide(index){
+
+    slides.forEach(slide=>{
+      slide.classList.remove('active');
+    });
+
+    slides[index].classList.add('active');
 }
 
-function currentSlide(n) {
-  showSlides(slideIndex = n);
-}
+nextBtn.addEventListener('click',()=>{
+    currentSlide++;
+    if(currentSlide >= slides.length){
+      currentSlide = 0;
+    }
+    showSlide(currentSlide);
+});
 
-function showSlides(n) {
-  let i;
-  let slides = document.getElementsByClassName("mySlides");
-  let dots = document.getElementsByClassName("dot");
-  if (n > slides.length) {slideIndex = 1}    
-  if (n < 1) {slideIndex = slides.length}
-  for (i = 0; i < slides.length; i++) {
-    slides[i].style.display = "none";  
-  }
-  for (i = 0; i < dots.length; i++) {
-    dots[i].className = dots[i].className.replace(" active", "");
-  }
-  slides[slideIndex-1].style.display = "block";  
-  dots[slideIndex-1].className += " active";
-}
+prevBtn.addEventListener('click',()=>{
+    currentSlide--;
+    if(currentSlide < 0){
+      currentSlide = slides.length - 1;
+    }
+    showSlide(currentSlide);
+});
 
 // --------------DropDown Menu------------
 const userIcon = document.getElementById("userIcon");

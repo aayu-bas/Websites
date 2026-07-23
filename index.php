@@ -1,4 +1,60 @@
 <?php
+require_once __DIR__ . '/config/config.php';
+$pageTitle='Home ';
+
+global $conn;
+
+$sale_sql = "SELECT p.*, c.category_name, c.slug AS category_slug,
+               pi.image_path AS primary_image
+        FROM products p
+        JOIN categories c ON p.category_id = c.category_id
+        LEFT JOIN product_images pi
+            ON p.product_id = pi.product_id
+            AND pi.is_primary = 1
+        WHERE p.is_on_sale = 1
+        AND p.is_active = 1
+        LIMIT 3";
+$sale_result = mysqli_query($conn, $sale_sql);
+$saleProducts = [];
+
+while ($row = mysqli_fetch_assoc($sale_result)) {
+    $saleProducts[] = $row;
+}
+
+$featured_sql = "SELECT p.*, c.category_name, c.slug AS category_slug,
+               pi.image_path AS primary_image
+        FROM products p
+        JOIN categories c ON p.category_id = c.category_id
+        LEFT JOIN product_images pi
+            ON p.product_id = pi.product_id
+            AND pi.is_primary = 1
+        WHERE p.is_featured = 1
+        AND p.is_active = 1
+        LIMIT 8";
+
+$featured_result = mysqli_query($conn, $featured_sql);
+$featuredProducts = [];
+
+while ($row = mysqli_fetch_assoc($featured_result)) {
+    $featuredProducts[] = $row;
+}
+$category_sql = "SELECT c.*,
+               (SELECT COUNT(*)
+                FROM products p
+                WHERE p.category_id = c.category_id
+                AND p.is_active = 1) AS product_count
+        FROM categories c
+        WHERE c.is_active = 1
+        ORDER BY c.display_order";
+
+$category_result = mysqli_query($conn, $category_sql);
+
+$categories = [];
+
+while ($row = mysqli_fetch_assoc($category_result)) {
+    $categories[] = $row;
+}
+
 if (isset($_SESSION['login_time'])) {
     if ((time() - $_SESSION['login_time']) > $_SESSION['expire_time']) {
         session_unset();
@@ -9,131 +65,102 @@ if (isset($_SESSION['login_time'])) {
 }
 require_once __DIR__ . '/includes/header.php';
 
+$slides=[
+    [
+        'spotlight'=> '# SPOTLIGHT 1',
+        'title' => 'Handmade with Love',
+        'subtitle' => 'Discover unique crochet creations crafted by skilled artisans. Each piece tells a story of patience and creativity.',
+        'bg'=>'url(assets/images/slider/slider1.jpg)',
+        'btn_text'=>'Shop All',
+        'btn_link'=>'pages/shop.php'
+    ],
+    [
+        'spotlight'=> '# SPOTLIGHT 2',
+        'title' => 'Winter Crochet Products',
+        'subtitle' => 'Warm up with our latest collection of crochet beanies, scarves, and cozy wearables. Perfect for the season!',
+        'bg'=>'url(assets/images/slider/cardi.png)',
+        'btn_text'=>'View Collection',
+        'btn_link'=>'pages/shop.php'
+    ],
+    [
+        'spotlight'=> '# SPOTLIGHT 3',
+        'title' => 'Custom Crochet Orders',
+        'subtitle' => 'Have something special in mind? Design your own custom crochet piece with our easy-to-use designer tool.',
+        'bg' => 'url(assets/images/slider/slide3.jpg)',
+        'btn_text' => 'Design Now',
+        'btn_link' => 'pages/custom-designer.php' 
+    ]
+]
 ?>
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home - Yarnify</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <link rel="stylesheet" href="style.css">
-    <link rel="icon" href="yarnify.png">
-</head>
-<body class="font-style">
-    <div id="header">
+<html>
+<body>
+    <section class="slideshow-container">
+        <?php foreach ($slides as $index => $slide): ?>
+        <div class="slide <?php echo $index === 0 ? 'active' : ''; ?>">
+            <div class="slide-bg" style="background: <?php echo $slide['bg']; ?>"></div>
+            <div class="slide-container">
+                <div class="slide-content">
+                    <h3><?php echo htmlspecialchars($slide['spotlight']); ?></h3>
+                    <h2><?php echo htmlspecialchars($slide['title']); ?></h2>
+                    <p><?php echo htmlspecialchars($slide['subtitle']); ?></p>
+                    <a href="<?php echo SITE_URL . '/' . $slide['btn_link']; ?>" class="btn btn-large shop-primary">
+                        <?php echo htmlspecialchars($slide['btn_text']); ?> <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <?php endforeach; ?>
+        <div class="slider-arrows">
+            <button class="slider-arrow prev"><i class="fas fa-chevron-left"></i></button>
+            <button class="slider-arrow next"><i class="fas fa-chevron-right"></i></button>
+        </div>
+        </section>
+
+        
+    <?php if (!empty($saleProducts)): ?>
+    <section class="sale-section">
         <div class="container">
-            <nav class="navbar">
-                <div class="navbar-left">
-                <img src="yarnify.png" alt="logo" class="logo">
-                <a href="index.php" style="text-decoration: none;"><p class="brand-name">Yarnify</p></a>
-                </div>
-                <div id="tabs">
-                <ul>
-                    <li><a href="index.php"class="active" style="background: #ffffb7;">Home</a></li>
-                    <li><a href="about.php">About</a></li>
-                    <li><a href="shop.php">Shop</a></li>
-                    <li><a href="patterns.php">Patterns</a></li>
-                    <li><a href="yarns.php">Yarns</a></li>
-                    <li class="search-container">
-                        <div class="search-bar">
-                            <i class="fa-solid fa-magnifying-glass"></i>
-                            <input type="text" id="searchInput" placeholder="Search" autocomplete="off"/>
+            <div class="sale-header">
+                <h2>Our Sales(40% OFF)🎉</h2>
+            </div>
+            <div class="products-grid">
+                <?php foreach ($saleProducts as $product):
+                    $discount = round((($product['price']-$product['sale_price'])/$product['price']) * 100);
+                ?>
+                <div class="card">
+                    <div class="product-image">
+                        <img src="<?php echo ASSETS_URL; ?>/images/products/<?php echo $product['primary_image']?? 'placeholder.jpg'; ?>" alt="<?php echo htmlspecialchars($product['product_name']); ?>">
+                        <div class="product-badges">
+                            <span class="badge badge-sale">-<?php echo $discount; ?>%</span>
                         </div>
-                        <div class="search-results" id="searchResults"></div>
-                    </li>
-                    
-                    <li class="user-menu">
-                        <?php if (isset($_SESSION['logged_in'])): ?>
-                            <div class="user-dropdown">
-                                <i class="fa-solid fa-user-check" id="userIcon" title="<?php echo $_SESSION['user_email']; ?>"></i>
-                                <div class="dropdown-menu" id="dropdownMenu">
-                                    <a href="myprofile.php">
-                                         <i class="fa-solid fa-user"></i>My Profile
-                                    </a>
-                                    <a href="settings.php">
-                                        <i class="fa-solid fa-gear"></i>Settings
-                                    </a>
-                                    <a href="logsout.php">
-                                       <i class="fa-solid fa-right-from-bracket"></i> Logout
-                                    </a>
-                                </div>
-                            </div>
+                        <div class="product-actions">
+                            <button class="action-btn add-to-wishlist-btn" title="Add to Wishlist">
+                                <i class="fas fa-heart"></i>
+                            </button>
                             
-                        <?php else: ?>
-                            <a href="/pages/login.php">
-                                <i class="fa-regular fa-user" title="user"></i>
-                            </a>
-                        <?php endif; ?>
-                    </li>
-                    <li><i class="fa-solid fa-bag-shopping" title="cart"></i></li>
-                </ul>
+                            <button class="action-btn add-to-cart-btn" title="Add to Cart">
+                                <i class="fas fa-shopping-bag"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="product-info">
+                        <span class="product-category"><?php echo htmlspecialchars($product['category_name']);?></span>
+                        <a href="<php echo SITE_URL; ?>/pages/product.php?>" class="product-name">
+                            <?php echo htmlspecialchars($product['product_name']); ?>
+                        </a>
+                        <div class="product-price">
+                            <span class="price"><?php echo formatPrice($product['sale_price']); ?></span>
+                            <span class="price-original"><?php echo formatPrice($product['price']);?></span>
+                            <span class="price-discount">-<?php echo $discount; ?>%</span>
+                        </div>
+                    </div>
                 </div>
-            </nav>
+                <?php endforeach; ?>
+            </div>
         </div>
-    </div>
-
-    <div class="slideshow-container">
-        <div class="mySlides fade">
-            <div class="numbertext">#Spotlight 1</div>
-            <img src="slider/cardigans.png" alt="winter sale promo">
-            <div class="text"> WINTER SALES <i class='fas fa-snowflake' style='font-size:28px;color:rgb(190, 247, 247)'></i><br><br>
-            <a href="">SHOP ALL</a></div>
-        </div>
-
-        <div class="mySlides fade">
-            <div class="numbertext">#Spotlight 2</div>
-            <img src="slider/plush.png" alt="">
-            <div class="text">DISCOVER MORE AMIGURUMIS LIKE THIS</div>
-        </div>
-
-        <div class="mySlides fade">
-            <div class="numbertext">#Spotlight 3</div>
-            <img src="slider/discover_pattern.jpg" alt="">
-            <div class="text">Maybe some text</div>
-        </div>
-        <a class="prev" onclick="plusSlides(-1)">❮</a>
-        <a class="next" onclick="plusSlides(1)">❯</a>
-    </div>
-    <br>
-    <div style="text-align: center;">
-        <span class="dot" onclick="currentSlide(1)"></span>
-        <span class="dot" onclick="currentSlide(2)"></span>
-        <span class="dot" onclick="currentSlide(3)"></span> 
-    </div>
-
-    <h1>Our Sales(10% OFF)🎉</h1>
-    <div class="sale-container">
-        <div class="card">
-            <div class="sale">Sale</div>
-                <img src="photos/couplecat.png">
-                <div class="content">
-                    <h3>Couple Cat</h3>
-                    <p class="old-price">Rs.3,200.00 NPR</p>
-                    <p class="new-price">Rs.2,800.00 NPR</p>
-                </div>
-        </div>
-
-        <div class="card">
-            <div class="sale">Sale</div>
-                <img src="photos/brownbag.png">
-                <div class="content">
-                    <h3>Cute Brown Tote Bag</h3>
-                    <p class="old-price">Rs.3,200.00 NPR</p>
-                    <p class="new-price">Rs.2,800.00 NPR</p>
-                </div>
-        </div>
-
-        <div class="card">
-            <div class="sale">Sale</div>
-                <img src="photos/football pillow.png">
-                <div class="content">
-                    <h3>Football Pillow</h3>
-                    <p class="old-price">Rs.3,200.00 NPR</p>
-                    <p class="new-price">Rs.2,800.00 NPR</p>
-                </div>
-        </div>
-    </div>
+    </section>
+    <?php endif; ?>
 
     <div class="about-me">
         <div id="inner-container">
@@ -153,7 +180,45 @@ require_once __DIR__ . '/includes/header.php';
         </div>
     </div>
 
-   <div id="product-sections"></div>
+    <!-- categories section -->
+     <section class="categories-section section-padding">
+        <div class="container">
+            <div class="section-header">
+                <h2>Shop By Category</h2>
+                <p>Explore our variety of handmade crochet categories</p>
+            </div>
+            <div class="categories-grid">
+                <?php foreach($categories as $category):
+                $iconList =[
+                    'amigurumi' => 'fa-ghost',
+                    'wearables' => 'fa-hat-cowboy',
+                    'decors' => 'fa-home',
+                    'characters' => 'fa-book-reader',
+                    'keychains' => 'fa-key'
+                ];
+                $icon = $iconList[$category['slug']] ?? 'fa-box';
+                ?>
+                <a href="<?php echo SITE_URL; ?>/pages/shop.php?category=<?php echo $category['slug'];?>" class="category-card">
+                <div class="category-icon">
+                    <i class="fas <?php echo $icon; ?>"></i>
+                </div>
+                <h3><?php echo htmlspecialchars($category['category_name']); ?></h3>
+                </a>
+                <?php endforeach; ?>
+            </div>
+        </div>
+     </section>
+
+    <section class="section-padding" style="background-color:white">
+        <div class="container">
+            <div class="section-header">
+                <h2>Featured Products</h2>
+                <p>My Most Beloved Creations</p>
+            </div>
+        </div>
+    </section>
+
+   <!-- <div id="product-sections"></div>
 
     <!-- pop up cart -->
     <div class="modal" id="cartModal">
@@ -166,176 +231,14 @@ require_once __DIR__ . '/includes/header.php';
                 Go to Checkout
             </button>
         </div>
-    </div>
+    </div> -->
 
     <div class="browse">
         <p>Browse to other categories<span class="pointer" onclick="result()">→</span></p>
     </div>
-<!-- ==================collection========================= -->
-    <div class="collections">
-        <div class="col-grid">
-            <!-- box 1 -->
-            <div class="collection-box">
-                <h2>Free Patterns</h2>
-                <div class="image-grid">
-                    <div class="image-item">
-                        <div class="pdf">PDF</div>
-                        <img src="https://i.pinimg.com/736x/0c/3f/58/0c3f58ec17a1749bb65e6f7c2b368cbb.jpg" alt="">
-                        <p>Teddy Bear</p>
-                       
-                    </div>
 
-                    <div class="image-item">
-                        <div class="pdf">PDF</div>
-                        <img src="https://i.pinimg.com/736x/a1/12/95/a112952b21fed735c7e3c17f80aaffe1.jpg" alt="">
-                        <p>Bunny Plush</p>
-                    </div>
 
-                    <div class="image-item">
-                        <div class="pdf">PDF</div>
-                        <img src="https://i.pinimg.com/736x/1d/6e/7d/1d6e7dd2d17865dd75ca78ca9c3ced4a.jpg" alt="">
-                        <p>Unicorn</p>
-                    </div>
 
-                    <div class="image-item">
-                        <div class="pdf">PDF</div>
-                        <img src="https://i.pinimg.com/736x/d7/1b/30/d71b30e97fc0ed177536a44179f29e54.jpg" alt="">
-                        <p>Dinosaur</p>
-                    </div>
-                </div>
-                <a href="#" class="see-more">See More →</a>
-            </div>
-            <!-- box 2-->
-             <div class="collection-box">
-                <h2>Yarn Collections</h2>
-                <div class="image-grid">
-                    <div class="image-item">
-                        <img src="https://i.pinimg.com/736x/77/1a/c7/771ac748f0e6a346093e89632348e693.jpg" alt="">
-                        <p>Pastel Yarn</p>
-                       
-                    </div>
-
-                    <div class="image-item">   
-                        <img src="https://i.pinimg.com/736x/0a/42/bf/0a42bf42af4d60a4c957f4f1e39286f3.jpg" alt="">
-                        <p>Bulky Yarn</p>
-                    </div>
-
-                    <div class="image-item">
-                        <img src="https://i.pinimg.com/1200x/21/ca/c2/21cac292ba4dd3358d6b9b341cc55285.jpg" alt="">
-                        <p>Alpaca Yarn</p>
-                    </div>
-
-                    <div class="image-item">
-                        <img src="https://d2q9kw5vp0we94.cloudfront.net/i/w=1000,h=1000,try=_crochet,v=1/yarnlistthumb/5420369.jpg~w=300" alt="">
-                        <p>Lace Yarn</p>
-                    </div>
-                </div>
-                <a href="#" class="see-more">See More →</a>
-            </div>
-
-            <!-- box 3 -->
-             <div class="collection-box">
-                <h2>Hook Sizes</h2>
-                <div class="image-grid">
-                    <div class="image-item">
-                        
-                        <img src="https://m.media-amazon.com/images/I/41ePSlOsWFL._AC_UF894,1000_QL80_.jpg" alt="">
-                        <p>2.0mm & 2.5mm</p>
-                       
-                    </div>
-
-                    <div class="image-item">
-                       
-                        <img src="https://www.hobbycraft.co.uk/dw/image/v2/BHCG_PRD/on/demandware.static/-/Sites-hobbycraft-uk-master/default/dw781bd971/images/large/665365_1000_2_-knitcraft-aluminium-crochet-hook-4-mm-pink.jpg?sw=554&q=85" alt="">
-                        <p>4.0mm</p>
-                    </div>
-
-                    <div class="image-item">
-                       
-                        <img src="https://m.media-amazon.com/images/I/41sgSAiN47L.jpg" alt="">
-                        <p>3.5mm</p>
-                    </div>
-
-                    <div class="image-item">
-                        
-                        <img src="https://m.media-amazon.com/images/I/51Cc2RhvspL.jpg" alt="">
-                        <p>5mm</p>
-                    </div>
-                </div>
-                <a href="#" class="see-more">See More →</a>
-            </div>
-            <!-- box 4 -->
-             <div class="collection-box">
-                <h2>KeyChains</h2>
-                <div class="image-grid">
-                    <div class="image-item">
-                        
-                        <img src="https://i.pinimg.com/1200x/a8/8d/e3/a88de37d3e251002dd8f049f01fcd093.jpg" alt="">
-                        <p>Star Keyring</p>
-                       
-                    </div>
-
-                    <div class="image-item">
-                       
-                        <img src="https://i.pinimg.com/1200x/14/ce/55/14ce553d8c2ee357993fd923f8c65e1a.jpg" alt="">
-                        <p>Silver KeyRing</p>
-                    </div>
-
-                    <div class="image-item">
-
-                        <img src="https://i.pinimg.com/1200x/0a/38/3a/0a383a62398327e3f982cf26acbaf29f.jpg" alt="">
-                        <p>Metal Keyring</p>
-                    </div>
-
-                    <div class="image-item">
-                        
-                        <img src="https://i.pinimg.com/736x/5c/d7/42/5cd7420c542a29d47e0aebc8a203bafd.jpg" alt="">
-                        <p>Gold Keyring</p>
-                    </div>
-                </div>
-                <a href="#" class="see-more">See More →</a>
-            </div>
-            
-        </div>
-    </div>
-
-    <!-- =============chatbot=============== -->
-    <button class="chatbot-toggle" id="chatbotToggle">
-        <i class="fa-solid fa-message fa-2xl" style="color: rgb(251, 251, 251);"></i>
-    </button>
-
-  <div class="chatbot-window" id="chatbotWindow">
-        <div class="chatbot-header">
-        <h3>🧶 Crochet Helper</h3>
-        <p>Ask me anything about crochet!</p>
-        </div>
-
-        <div class="chatbot-messages" id="chatbotMessages">
-            <div class="message bot">
-                <div class="message-avatar">🧸</div>
-                <div class="message-content">
-                Hi there! I'm your crochet assistant. How can I help you today?
-                </div>
-            </div>
-
-            <div class="typing-indicator" id="typingIndicator">
-                <div class="typing-dot"></div>
-                <div class="typing-dot"></div>
-                <div class="typing-dot"></div>
-            </div>
-        </div>
-
-        <div class="quick-replies" id="quickReplies">
-            <button class="quick-reply-btn" onclick="sendQuickReply('Free patterns')">Free Patterns</button>
-            <button class="quick-reply-btn" onclick="sendQuickReply('Beginner tips')">Beginner Tips</button>
-            <button class="quick-reply-btn" onclick="sendQuickReply('Yarn guide')">Yarn Guide</button>
-        </div>
-
-        <div class="chatbot-input">
-            <input type="text" id="chatbotInput" placeholder="Type your message..." onkeypress="handleKeyPress(event)"/>
-            <button onclick="sendMessage()">➤</button>
-        </div>
-    </div>
 
     <!-- ==============footer==================== -->
     <footer>
@@ -406,6 +309,6 @@ require_once __DIR__ . '/includes/header.php';
             </div>
         </div>
     </footer>
-    <script src="script.js"></script>
+    <script src="assets/js/script.js"></script>
 </body>
 </html>
