@@ -21,6 +21,7 @@ while ($row = mysqli_fetch_assoc($sale_result)) {
     $saleProducts[] = $row;
 }
 
+
 $featured_sql = "SELECT p.*, c.category_name, c.slug AS category_slug,
                pi.image_path AS primary_image
         FROM products p
@@ -38,6 +39,7 @@ $featuredProducts = [];
 while ($row = mysqli_fetch_assoc($featured_result)) {
     $featuredProducts[] = $row;
 }
+
 $category_sql = "SELECT c.*,
                (SELECT COUNT(*)
                 FROM products p
@@ -208,107 +210,78 @@ $slides=[
             </div>
         </div>
      </section>
-
+    <!-- featured products -->
     <section class="section-padding" style="background-color:white">
         <div class="container">
             <div class="section-header">
                 <h2>Featured Products</h2>
-                <p>My Most Beloved Creations</p>
+                <p>Our Most Beloved Creations</p>
+            </div>
+            <div class="products-grid">
+                <?php if (!empty($featuredProducts)): ?>
+                    <?php foreach ($featuredProducts as $product): ?>
+                <div class="product-card">
+                    <div class="product-image">
+                        <img src="<?php echo ASSETS_URL;?>/images/products/<?php echo $product['primary_image'] ?? 'placeholder.jpg'; ?>" alt="<?php echo htmlspecialchars($product['product_name']); ?>">
+                        <div class="product-badges">
+                            <?php if($product['is_on_sale']):?>
+                                <span class="badge badge-sale">SALE</span>
+                                <?php endif;?>
+                                <span class="badge badge-featured">FEATURED</span>
+                        </div>
+                        <div class="product-actions">
+                            <button class="action-btn add-to-wishlist-btn" title="Add to Wishlist">
+                                <i class="fas fa-heart"></i>
+                            </button>
+                            <button class="action-btn add-to-cart-btn" data-product-id="<?php echo $product['product_id']; ?>" title="Add to Cart">
+                                <i class="fas fa-shopping-bag"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="product-info">
+                        <span class="product-category"><?php echo htmlspecialchars($product['category_name']); ?></span>
+                        <a href="<?php echo SITE_URL; ?>/pages/product.php?>" class="product-name">
+                            <?php echo htmlspecialchars($product['product_name']); ?>
+                        </a>
+                        <div class="product-price">
+                            <?php if ($product['sale_price'] && $product['sale_price'] < $product['price']): ?>
+                            <span class="price"><?php echo formatPrice($product['sale_price']); ?></span>
+                            <span class="price-original"><?php echo formatPrice($product['price']); ?></span>
+                            <?php else: ?>
+                            <span class="price"><?php echo formatPrice($product['price']); ?></span>
+                            <?php endif; ?>
+                        </div>
+                    </div>
+                </div>
+                    <?php endforeach; ?>
+                    <?php endif; ?>
+            </div>
+            <div class="text-center" style="margin-top:40px;">
+                <a href="<?php echo SITE_URL; ?>/pages/shop.php" class="btn btn-large btn-outline">
+                View All Products <i class="fas fa-arrow-right"></i>
+            </a>
             </div>
         </div>
     </section>
 
-   <!-- <div id="product-sections"></div>
-
-    <!-- pop up cart -->
-    <div class="modal" id="cartModal">
-        <div class="modal-content">
-            <button onclick="closeModal()" id="closed">✕</button>
-            <div id="bear-icon">🧸</div>
-            <h3>⋆｡‧˚ʚAdded to the Cartɞ˚‧｡⋆</h3>
-            <p id="productname"></p>
-            <button class="checkout" onclick="checkout()">
-                Go to Checkout
-            </button>
-        </div>
-    </div> -->
-
-    <div class="browse">
-        <p>Browse to other categories<span class="pointer" onclick="result()">→</span></p>
-    </div>
-
-
-
-
-    <!-- ==============footer==================== -->
-    <footer>
-        <div class="footer-container">
-            <div class="newsletter">
-                <h3>Stay  Updated! <i class="fa-solid fa-envelope"></i></h3>
-                <p>Get Free patterns and crochet tips delivered to your inbox! ^^</p>
-                <form action="post" class="mail">
-                    <input type="email" name="Email" id="" placeholder="Your email address" required/>
-                    <button type="submit">Subscribe</button>
-                </form>
-            </div>
-            <div class="footer-content">
-                <div class="footer-section">
-                    <h3>ABOUT</h3>
-                    <ul>
-                        <li><a href="#">About Us</a></li>
-                        <li><a href="#">Contact Us</a></li>
-                        <li> <a href="#">Support</a></li>
-                        <li><a href="#">Help Center</a></li>
-                    </ul>  
-                </div>
-
-                <div class="footer-section">
-                    <h3>LEARN</h3>
-                    <ul>
-                        <li><a href="#">Tools Required</a></li>
-                        <li><a href="#">Beginner Tutorials</a></li>
-                        <li><a href="#">Video Guides</a></li>
-                        <li><a href="#">Blog</a></li>
-                    </ul>
-                </div>
-
-                <div class="footer-section">
-                    <h3>SUPPORT</h3>
-                    <ul>
-                        <li><a href="#">Contact Us</a></li>
-                        <li><a href="#">FAQs</a></li>
-                        <li><a href="#">Shipping Info</a></li>
-                        <li><a href="#">Return Policy</a></li>
-                    </ul>
-                </div>
-
-                <div class="footer-section">
-                    <h3>LEGAL</h3>
-                    <ul>
-                        <li><a href="#">Terms and Condition</a></li>
-                        <li><a href="#">Cookie Policy</a></li>
-                        <li><a href="#">Cookie Setting</a></li>
-                        <li><a href="#">Privacy Policy</a></li>
-                        <li><a href="#">General Product Safety Return</a></li>
-                    </ul>
-                </div>
-
-                <div class="footer-section">
-                    
-                    <h3>CONNECT WITH US</h3>
-                    <div class="social-links"></div>
-                        <a href="#"><i class="fa-brands fa-instagram fa-xl"></i></i></a>
-                        <a href="#"><i class="fa-brands fa-facebook fa-xl"></i></a>
-                        <a href="#"><i class="fa-brands fa-youtube fa-xl"></i></a>
-                        <a href="#"><i class="fa-brands fa-pinterest fa-xl"></i></a>
-                    </div>
-                </div>
-            </div>
-            <div class="bottom">
-                <p>Made with Love and Care by Yarnify &copy; 2025</p>
+    <!-- custom crochet -->
+     <section class="section-padding" style="background: linear-gradient(135deg, var(--color-light-pink), var(--color-yellow));">
+        <div class="container">
+            <div class="text-center"  style="max-width: 600px; margin: 0 auto;">
+                <h2 style="font-size: 2.2rem; color: var(--color-dark-brown); margin-bottom: 15px;">
+                Design Your Own Crochet!
+            </h2>
+            <p style="color: var(--color-gray); margin-bottom: 30px; font-size: 1.1rem;">
+                Can't find what you're looking for? Create your own custom crochet design with our easy-to-use tool. Choose colors, size, and style!
+            </p>
+            <a href="<?php echo SITE_URL; ?>/pages/custom-designer.php" class="btn btn-large btn-primary">
+                <i class="fas fa-magic"></i> Start Designing
+            </a>
             </div>
         </div>
-    </footer>
-    <script src="assets/js/script.js"></script>
+     </section>
+
+     <?php require_once __DIR__ .  '/includes/footer.php';?>
+
 </body>
 </html>
