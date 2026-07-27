@@ -3,9 +3,8 @@ $host = "localhost";
 $username = "root";
 $password = "";
 $database = "yarnify_db";
-$port = 3307;
 
-$conn = mysqli_connect($host, $username, $password, $database, $port);
+$conn = mysqli_connect($host, $username, $password, $database);
 
 if (!$conn) {
     die("Connection failed: " . mysqli_connect_error());
