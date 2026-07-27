@@ -6,10 +6,11 @@ require_once __DIR__ . '/../config/config.php';
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?php echo isset($pageTitle)? htmlspecialchars($pageTitle). '|': '';?>Yarnify- Handmade Crochet Store</title>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <title><?php echo isset($pageTitle)? htmlspecialchars($pageTitle). '| ': '';?>Yarnify- Handmade Crochet Store</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="<?php echo ASSETS_URL; ?>/css/style.css">
     <link rel="icon" href="yarnify.png">
+    <?php if (isset($extraCSS)) echo $extraCSS; ?>
 </head>
 <body>
     <nav class="navbar">
@@ -44,7 +45,7 @@ require_once __DIR__ . '/../config/config.php';
                     <i class="fa-solid fa-user"></i>
                 </a>
 
-                <a href="<?php echo SITE_URL; ?>/pages/login.php" class="btn btn-small btn-primary">Login</a>
+                <a href="<?php echo SITE_URL; ?>/pages/login.php" class="btn-login btn-small btn-primary">Login</a>
 
                 <button class="mobile-menu-btn">
                     <i class="fas fa-bars"></i>
