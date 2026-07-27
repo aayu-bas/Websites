@@ -3,12 +3,6 @@ session_start();
 
 require_once __DIR__ . '/database.php';
 
-/*
-|--------------------------------------------------------------------------
-| Site Configuration
-|--------------------------------------------------------------------------
-*/
-
 define('SITE_NAME', 'Yarnify');
 define('SITE_URL', 'http://localhost/websites');
 define('ADMIN_URL', SITE_URL . '/admin');
@@ -37,8 +31,7 @@ define('CSRF_TOKEN_NAME', 'yarnify_csrf_token');
 define('PRODUCTS_PER_PAGE', 12);
 define('ORDERS_PER_PAGE', 10);
 
-function generateCSRFToken()
-{
+function generateCSRFToken(){
     if (empty($_SESSION[CSRF_TOKEN_NAME])) {
         $_SESSION[CSRF_TOKEN_NAME] = bin2hex(random_bytes(32));
     }
@@ -46,37 +39,30 @@ function generateCSRFToken()
     return $_SESSION[CSRF_TOKEN_NAME];
 }
 
-function verifyCSRFToken($token)
-{
+function verifyCSRFToken($token){
     return isset($_SESSION[CSRF_TOKEN_NAME]) &&
         hash_equals($_SESSION[CSRF_TOKEN_NAME], $token);
 }
 
-function csrfField()
-{
+function csrfField(){
     $token = generateCSRFToken();
 
     return '<input type="hidden" name="' . CSRF_TOKEN_NAME . '" value="' . htmlspecialchars($token) . '">';
 }
 
-
-function redirect($url)
-{
+function redirect($url){
     header("Location: " . $url);
     exit();
 }
 
-
-function setFlashMessage($type, $message)
-{
+function setFlashMessage($type, $message){
     $_SESSION['flash_messages'][] = [
         'type' => $type,
         'message' => $message
     ];
 }
 
-function getFlashMessages()
-{
+function getFlashMessages(){
     $messages = $_SESSION['flash_messages'] ?? [];
 
     unset($_SESSION['flash_messages']);
@@ -84,28 +70,23 @@ function getFlashMessages()
     return $messages;
 }
 
-function isLoggedIn()
-{
+function isLoggedIn(){
     return isset($_SESSION['user_id']) && !empty($_SESSION['user_id']);
 }
 
-function isAdminLoggedIn()
-{
+function isAdminLoggedIn(){
     return isset($_SESSION['admin_id']) && !empty($_SESSION['admin_id']);
 }
 
-function getCurrentUserId()
-{
+function getCurrentUserId(){
     return $_SESSION['user_id'] ?? null;
 }
 
-function getCurrentAdminId()
-{
+function getCurrentAdminId(){
     return $_SESSION['admin_id'] ?? null;
 }
 
-function requireLogin()
-{
+function requireLogin(){
     if (!isLoggedIn()) {
 
         setFlashMessage('warning', 'Please login to continue.');
@@ -114,8 +95,7 @@ function requireLogin()
     }
 }
 
-function requireAdminLogin()
-{
+function requireAdminLogin(){
     if (!isAdminLoggedIn()) {
 
         setFlashMessage('warning', 'Please login as admin to continue.');
@@ -124,23 +104,19 @@ function requireAdminLogin()
     }
 }
 
-function sanitize($data)
-{
+function sanitize($data){
     return htmlspecialchars(strip_tags(trim($data)), ENT_QUOTES, 'UTF-8');
 }
 
-function formatPrice($price)
-{
+function formatPrice($price){
     return 'रु ' . number_format($price, 2);
 }
 
-function generateOrderNumber()
-{
+function generateOrderNumber(){
     return 'YNF-' . date('Ymd') . '-' . strtoupper(substr(uniqid(), -6));
 }
 
-function uploadImage($file, $destinationPath, $prefix = '')
-{
+function uploadImage($file, $destinationPath, $prefix = ''){
     if (!isset($file['tmp_name']) || empty($file['tmp_name'])) {
         return [
             'success' => false,
@@ -196,8 +172,7 @@ function uploadImage($file, $destinationPath, $prefix = '')
     ];
 }
 
-function deleteImage($filename, $path)
-{
+function deleteImage($filename, $path){
     $filepath = $path . $filename;
 
     if (file_exists($filepath)) {
@@ -205,5 +180,24 @@ function deleteImage($filename, $path)
     }
 
     return false;
+}
+if (!isset($_SESSION['user_id']) && isset($_COOKIE['remember_token'])) {
+
+    $token = mysqli_real_escape_string($conn, $_COOKIE['remember_token']);
+
+    $sql = "SELECT * FROM users
+            WHERE remember_token='$token'
+            LIMIT 1";
+
+    $result = mysqli_query($conn, $sql);
+
+    if(mysqli_num_rows($result) == 1){
+
+        $user = mysqli_fetch_assoc($result);
+
+        $_SESSION['user_id'] = $user['user_id'];
+        $_SESSION['user_name'] = $user['first_name'].' '.$user['last_name'];
+        $_SESSION['user_email'] = $user['email'];
+    }
 }
 ?>
