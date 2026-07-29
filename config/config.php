@@ -88,9 +88,7 @@ function getCurrentAdminId(){
 
 function requireLogin(){
     if (!isLoggedIn()) {
-
         setFlashMessage('warning', 'Please login to continue.');
-
         redirect(SITE_URL . '/login.php');
     }
 }
@@ -181,6 +179,73 @@ function deleteImage($filename, $path){
 
     return false;
 }
+// Get category name by slug
+function getCategoryBySlug($slug) {
+    global $conn;
+    $slug = mysqli_real_escape_string($conn, $slug);
+
+    $sql = "SELECT * FROM categories WHERE slug = '$slug' AND is_active = 1";
+
+    $result = mysqli_query($conn, $sql);
+
+    if ($result && mysqli_num_rows($result) > 0) {
+        return mysqli_fetch_assoc($result);
+    }
+
+    return null;
+}
+
+// Get all active categories
+function getAllCategories() {
+
+    global $conn;
+
+    $sql = "SELECT *
+            FROM categories
+            WHERE is_active = 1
+            ORDER BY display_order";
+
+    $result = mysqli_query($conn, $sql);
+
+    $categories = [];
+
+    if ($result) {
+        while ($row = mysqli_fetch_assoc($result)) {
+            $categories[] = $row;
+        }
+    }
+
+    return $categories;
+}
+
+function getAverageRating($productId) {
+
+    global $conn;
+
+    $productId = (int)$productId;
+
+    $sql = "SELECT AVG(rating) AS avg_rating,
+                   COUNT(*) AS total_reviews
+            FROM reviews
+            WHERE product_id = $productId
+            AND is_approved = 1";
+
+    $result = mysqli_query($conn, $sql);
+
+    if ($result && mysqli_num_rows($result) > 0) {
+        $row = mysqli_fetch_assoc($result);
+
+        return [
+            'average' => round($row['avg_rating'] ?? 0, 1),
+            'total' => $row['total_reviews'] ?? 0
+        ];
+    }
+    return [
+        'average' => 0,
+        'total' => 0
+    ];
+}
+
 if (!isset($_SESSION['user_id']) && isset($_COOKIE['remember_token'])) {
 
     $token = mysqli_real_escape_string($conn, $_COOKIE['remember_token']);
