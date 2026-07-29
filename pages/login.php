@@ -1,27 +1,47 @@
 <?php
-require_once__DIR__ . '/../config/config.php';
-// require_once __DIR__ . '/../config/config.php';
+require_once __DIR__ . '/../config/config.php';
+$pageTitle = 'Login ';
 
 //redirect if already logged in
 if(isLoggedIn()){
     redirect(SITE_URL .'/index.php');
 }
+
 $error = '';
+if(isset($_SESSION['login_error'])){
+    $error = $_SESSION['login_error'];
+    unset($_SESSION['login_error']);
+}
 
 if ($_SERVER['REQUEST_METHOD']== 'POST') {
     //verify CSRF Token
-    if(!verifyCSRFToken($POST[CSRF_TOKEN_NAME]?? '')){
-        error='Invalid request. Please try again.';
+    if(!verifyCSRFToken($_POST[CSRF_TOKEN_NAME]?? '')){
+        $error='Invalid request. Please try again.';
     }else{
-        $email = $_POST['email'];
-        $password = $_POST['password'];
+        $email = trim($_POST['email']);
+        $password = trim($_POST['password']);
         $remember = isset($_POST['remember']);
 
         if (empty($email) || empty($password)) {
             $error = 'Please enter both email and password';
         }else{
             //fetch user by email
-            $user= fetchOne("SELECT * FROM users WHERE email=? AND is_active=1", [$email]);
+            $email = mysqli_real_escape_string($conn, $email);
+            $sql = "SELECT * FROM users
+                    WHERE email = '$email'
+                    AND is_active = 1";
+                
+            $result = mysqli_query($conn, $sql);
+            if($result){
+                $user = mysqli_fetch_assoc($result);
+            }else{
+                $error = "Database error.";
+            }
+
+            if(!filter_var($email, FILTER_VALIDATE_EMAIL)){
+                $error = "Please enter a valid email address.";
+            }
+            
 
             if($user && password_verify($password, $user['password_hash'])){
                 $_SESSION['user_id'] = $user['user_id'];
@@ -29,13 +49,29 @@ if ($_SERVER['REQUEST_METHOD']== 'POST') {
                 $_SESSION['user_email'] = $user['email'];
 
                 //update last login
-                executeQuery("UPDATE users SET last_login = NOW() WHERE user_id = ?", [$user['user_id']]);
+                $userId = (int)$user['user_id'];
 
+                $updateSql = "UPDATE users
+                  SET last_login = NOW()
+                  WHERE user_id = $userId";
+
+                mysqli_query($conn, $updateSql);
                 //handle remember me
+
                 if ($remember) {
-                    $token = bin2hex(random_bytes(32));
-                    setcookie('remember_token', $token, time() + 30 * 24 * 60 * 60, '/');
-                }
+
+                $token = bin2hex(random_bytes(32));
+
+                $userId = (int)$user['user_id'];
+
+                mysqli_query($conn,
+                    "UPDATE users
+                    SET remember_token='$token'
+                    WHERE user_id=$userId"
+                );
+
+                setcookie("remember_token", $token, time() + 3600,"/");
+            }
                 setFlashMessage('success', 'Welcome back, ' . htmlspecialchars($user['first_name']) . '!');
 
                 //Redirect to intended page
@@ -43,40 +79,38 @@ if ($_SERVER['REQUEST_METHOD']== 'POST') {
                 unset($_SESSION['redirect_after_login']);
                 redirect($redirect);
             }else{
-                $error = 'Invalid email or password. Please try again.';
+                $_SESSION['login_error'] = 'Invalid email or password. Please try again.';
+                redirect($_SERVER['PHP_SELF']);
             }
         }
     }
 }
-$pageTitle = 'Login';
-$extraCSS = '<link rel="stylesheet" href="' . ASSETS_URL . '/css/auth.css">';
 
+$extraCSS = '<link rel="stylesheet" href="' . ASSETS_URL . '/css/auth.css">';
+?>
 <!DOCTYPE html>
-<html lang="en">
-<head>
+<html>
+ <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login to Yarnify</title>
+    <title><?php echo isset($pageTitle)? htmlspecialchars($pageTitle). '| ': '';?>Yarnify- Handmade Crochet Store</title>
     <link rel="icon" href="yarnify.png">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-</head>
+    <?php echo $extraCSS; ?>
+</head>   
 <body>
 <div class="login-container">
     <div class="form-container">
-        <div class="form-blob">
-            <img src="login/blob.png" alt="blob" class="blob-image blob-image--1">
-            <img src="login/blob.png" alt="blob" class="blob-image blob-image--2">
-            <img src="login/blob.png" alt="blob" class="blob-image blob-image--3">
-        </div>
+
         <div class="form-header">
-            <p>Yarnify</p>
+            <a href="../index.php"><p>Yarnify</p></a>
             <h1>Welcome Back</h1>
         </div>
 
         <?php if ($error): ?>
-            <div class="flash-message error" style="margin-bottom: 20px; position: static;">
+            <div class="flash-message error">
                 <i class="fas fa-exclamation-circle"></i>
-                <span><?php echo $error; ?></span>
+                <span><?php echo htmlspecialchars($error); ?></span>
             </div>
         <?php endif; ?>
 
@@ -84,38 +118,48 @@ $extraCSS = '<link rel="stylesheet" href="' . ASSETS_URL . '/css/auth.css">';
             <?php echo csrfField(); ?>
 
             <div class="input-group">
-                <input type="email" id="email" name="email" class="input-field" placeholder="Email address" required
+                <input type="email" id="email" name="email" class="input-field" autocomplete="current-password" placeholder="Email address" required
                     value="<?php echo isset($_POST['email']) ? htmlspecialchars($_POST['email']) : ''; ?>">
             </div>
+
             <div class="input-group">
-                <input type="password" id="password" name="password" class="input-field" placeholder="Password" required>
-                </div>
-            </div>
-            <div class="input-group checkbox-group">
-                <div class="form-col remember-me">
-                    <input type="checkbox" name="remember" value="1" class="checkbox-field">
-                    <label>Remember me</label>
-                </div>
-                <div class="form-col">
-                    <a href="forgot-password.php" class="form-link">Forgot Password?</a>
-                </div>
+                <input type="password" id="password" name="password" autocomplete="current-password" class="input-field" placeholder="Password" required>
             </div>
 
-            <button type="submit" name="submit" class="form-btn form-btn--submit">
-                Sign In</button>
+            <div class="checkbox-group">
+
+                <div class="remember-me">
+                    <input type="checkbox" name="remember" value="1" class="checkbox-field" id="remember">
+
+                    <label for="remember">Remember me</label>
+                </div>
+
+                <a href="forgot-password.php" class="form-link">
+                    Forgot Password?
+                </a>
+
+            </div>
+
+            <button type="submit" name="submit" class="form-btn">
+                Sign In
+            </button>
+
         </form>
-            
+
         <div class="form-divider">
             <p>Or</p>
         </div>
 
         <div class="form-bottom">
-            <div class="form-socials">
-                <p style="text-align: center;">Don't have an account?
-                <a href="register.php" class="form-link">Create one now</a>
-                </p>
-            </div>
+            <p style="text-align:center;">
+                Don't have an account?
+                <a href="register.php" class="form-link">
+                    Create one now
+                </a>
+            </p>
         </div>
+
+    </div>
 </div>
 </body>
 </html>
