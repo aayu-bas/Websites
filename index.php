@@ -21,7 +21,6 @@ while ($row = mysqli_fetch_assoc($sale_result)) {
     $saleProducts[] = $row;
 }
 
-
 $featured_sql = "SELECT p.*, c.category_name, c.slug AS category_slug,
                pi.image_path AS primary_image
         FROM products p
@@ -65,7 +64,6 @@ if (isset($_SESSION['login_time'])) {
         exit();
     }
 }
-require_once __DIR__ . '/includes/header.php';
 
 $slides=[
     [
@@ -92,7 +90,9 @@ $slides=[
         'btn_text' => 'Design Now',
         'btn_link' => 'pages/custom-designer.php' 
     ]
-]
+];
+
+require_once __DIR__ . '/includes/header.php';
 ?>
 <!DOCTYPE html>
 <html>
@@ -113,6 +113,7 @@ $slides=[
             </div>
         </div>
         <?php endforeach; ?>
+
         <div class="slider-arrows">
             <button class="slider-arrow prev"><i class="fas fa-chevron-left"></i></button>
             <button class="slider-arrow next"><i class="fas fa-chevron-right"></i></button>
@@ -137,23 +138,24 @@ $slides=[
                             <span class="badge badge-sale">-<?php echo $discount; ?>%</span>
                         </div>
                         <div class="product-actions">
-                            <button class="action-btn add-to-wishlist-btn" title="Add to Wishlist">
+                            <button class="action-btn add-to-wishlist-btn" data-product-id="<?php echo $product['product_id']; ?>" title="Add to Wishlist">
                                 <i class="fas fa-heart"></i>
                             </button>
                             
-                            <button class="action-btn add-to-cart-btn" title="Add to Cart">
+                            <button class="action-btn add-to-cart-btn" data-product-id="<?php echo $product['product_id']; ?>" title="Add to Cart">
                                 <i class="fas fa-shopping-bag"></i>
                             </button>
                         </div>
                     </div>
+
                     <div class="product-info">
                         <span class="product-category"><?php echo htmlspecialchars($product['category_name']);?></span>
-                        <a href="<php echo SITE_URL; ?>/pages/product.php?>" class="product-name">
+                        <a href="<?php echo SITE_URL; ?>/pages/product.php?slug=<?php echo $product['slug']; ?>" class="product-name">
                             <?php echo htmlspecialchars($product['product_name']); ?>
                         </a>
                         <div class="product-price">
                             <span class="price"><?php echo formatPrice($product['sale_price']); ?></span>
-                            <span class="price-original"><?php echo formatPrice($product['price']);?></span>
+                            <span class="price-original"><?php echo formatPrice($product['price']); ?></span>
                             <span class="price-discount">-<?php echo $discount; ?>%</span>
                         </div>
                     </div>
@@ -167,7 +169,7 @@ $slides=[
     <div class="about-me">
         <div id="inner-container">
             <div id="photo-container">
-                <img src="us.jpeg" alt="" id="photo">
+                <img src="assets/images/us.jpeg" alt="" id="photo">
                 <div id="story">
                     <h2>Our Story</h2>
                     <center><p>Hello Cuties(⁠｡⁠•̀⁠ᴗ⁠-⁠)⁠✧</p></center>
@@ -210,6 +212,7 @@ $slides=[
             </div>
         </div>
      </section>
+
     <!-- featured products -->
     <section class="section-padding" style="background-color:white">
         <div class="container">
@@ -230,7 +233,7 @@ $slides=[
                                 <span class="badge badge-featured">FEATURED</span>
                         </div>
                         <div class="product-actions">
-                            <button class="action-btn add-to-wishlist-btn" title="Add to Wishlist">
+                            <button class="action-btn add-to-wishlist-btn" data-product-id="<?php echo $product['product_id']; ?>" title="Add to Wishlist">
                                 <i class="fas fa-heart"></i>
                             </button>
                             <button class="action-btn add-to-cart-btn" data-product-id="<?php echo $product['product_id']; ?>" title="Add to Cart">
@@ -240,7 +243,7 @@ $slides=[
                     </div>
                     <div class="product-info">
                         <span class="product-category"><?php echo htmlspecialchars($product['category_name']); ?></span>
-                        <a href="<?php echo SITE_URL; ?>/pages/product.php?>" class="product-name">
+                        <a href="<?php echo SITE_URL; ?>/pages/product.php?slug=<?php echo $product['slug']; ?>" class="product-name">
                             <?php echo htmlspecialchars($product['product_name']); ?>
                         </a>
                         <div class="product-price">
@@ -265,7 +268,7 @@ $slides=[
     </section>
 
     <!-- custom crochet -->
-     <section class="section-padding" style="background: linear-gradient(135deg, var(--color-light-pink), var(--color-yellow));">
+     <section class="section-padding" style="background: linear-gradient(135deg, var(--color-light-pink), var(--color-yellow)); margin-top:60px;">
         <div class="container">
             <div class="text-center"  style="max-width: 600px; margin: 0 auto;">
                 <h2 style="font-size: 2.2rem; color: var(--color-dark-brown); margin-bottom: 15px;">
