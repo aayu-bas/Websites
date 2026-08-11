@@ -17,11 +17,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $password = $_POST['password'] ?? '';
     $confirmPassword = $_POST['confirm_password'] ?? '';
 
-    if (empty($firstName)) $errors[] = 'First name is required.';
-    if (empty($lastName)) $errors[] = 'Last name is required.';
+    if (empty($firstName)) {
+      $errors[] = 'First name is required.';
+    } elseif (!preg_match("/^[a-zA-Z\s'-]+$/", $firstName)) {
+      $errors[] = 'First name can only contain letters, spaces, hyphens, and apostrophes.';
+    }
+
+    if (empty($lastName)) {
+      $errors[] = 'Last name is required.';
+    } elseif (!preg_match("/^[a-zA-Z\s'-]+$/", $lastName)) {
+      $errors[] = 'Last name can only contain letters, spaces, hyphens, and apostrophes.';
+    }
+
     if (empty($email) || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
       $errors[] = 'Please enter a valid email address.';
     }
+
     if (empty($password)) {
       $errors[] = 'Password is required.';
     } elseif (strlen($password) < 6) {
@@ -80,6 +91,7 @@ $pageTitle = 'Register ';
 $extraCSS = '<link rel="stylesheet" href="' . ASSETS_URL . '/css/auth_regis.css">';
 
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -94,7 +106,7 @@ $extraCSS = '<link rel="stylesheet" href="' . ASSETS_URL . '/css/auth_regis.css"
   <div class="auth-container">
     <div class="auth-visual">
       <div class="logo-img">
-        <a href="../index.php"><img src="../yarnify.png" alt="yarnify logo" style="height:150px; width=150px; "></a>
+        <a href="../index.php"><img src="../assets/images/yarnify.png" alt="yarnify logo" style="height:150px; width=150px; "></a>
       </div>
       <h2>Join Yarnify!</h2>
       <p>Create your account to start shopping, save your favorites, track orders, and design custom crochet pieces just for you.</p>
@@ -119,7 +131,7 @@ $extraCSS = '<link rel="stylesheet" href="' . ASSETS_URL . '/css/auth_regis.css"
             <label for="first_name">First Name</label>
             <div class="input-icon">
               <i class="fas fa-user"></i>
-              <input type="text" id="first_name" name="first_name" placeholder="Your First Name" required
+              <input type="text" id="first_name" name="first_name" placeholder="Your First Name" pattern="[A-Za-z\s'-]+" required
                     value="<?php echo isset($_POST['first_name']) ? htmlspecialchars($_POST['first_name']) : ''; ?>">
             </div>
           </div>
@@ -128,7 +140,7 @@ $extraCSS = '<link rel="stylesheet" href="' . ASSETS_URL . '/css/auth_regis.css"
             <label for="last_name">Last Name</label>
             <div class="input-icon">
                 <i class="fas fa-user"></i>
-                <input type="text" id="last_name" name="last_name" placeholder="Your Last Name" required
+                <input type="text" id="last_name" name="last_name" placeholder="Your Last Name" pattern="[A-Za-z\s'-]+" required
                       value="<?php echo isset($_POST['last_name']) ? htmlspecialchars($_POST['last_name']) : ''; ?>">
               </div>
             </div>
