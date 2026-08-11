@@ -1,10 +1,3 @@
-
-<?php
-// =====================================================
-// YARNIFY - FOOTER INCLUDE
-// =====================================================
-?>
-    <!-- Footer -->
     <footer class="footer">
         <div class="container">
             <div class="footer-grid">
@@ -46,8 +39,8 @@
                 <div class="footer-contact">
                     <h4>Contact Us</h4>
                     <p><i class="fas fa-envelope"></i> hello@yarnify.com</p>
-                    <p><i class="fas fa-phone"></i> +91 98765 43210</p>
-                    <p><i class="fas fa-map-marker-alt"></i> 123 Craft Lane, Creative City</p>
+                    <p><i class="fas fa-phone"></i> +977 9876543210</p>
+                    <p><i class="fas fa-map-marker-alt"></i> Langankhel, Patan</p>
                 </div>
             </div>
 
