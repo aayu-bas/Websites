@@ -1,13 +1,14 @@
 <?php
 session_start();
 
-require_once __DIR__ . '/database.php';
+require_once __DIR__ . '/db.php';
 
 define('SITE_NAME', 'Yarnify');
-define('SITE_URL', 'http://localhost/websites');
+define('SITE_URL', 'http://localhost:8080');
 define('ADMIN_URL', SITE_URL . '/admin');
 define('ASSETS_URL', SITE_URL . '/assets');
-define('ADMIN_ASSETS_URL', ADMIN_URL . '/admin/assets');
+define('ADMIN_ASSETS_URL', ADMIN_URL . '/assets');
+// define('ADMIN_ASSETS_URL', ADMIN_URL . '/admin/assets');
 
 define('UPLOAD_PATH', __DIR__ . '/../assets/images/uploads/');
 define('PRODUCT_IMAGE_PATH', __DIR__ . '/../assets/images/products/');
@@ -179,6 +180,53 @@ function deleteImage($filename, $path){
 
     return false;
 }
+
+// Get cart count for header
+function getCartCount() {
+    if (isLoggedIn()) {
+        global $conn;
+        $userId = (int)getCurrentUserId();
+
+        $sql = "SELECT SUM(ci.quantity) AS count
+                FROM cart c
+                JOIN cart_items ci
+                    ON c.cart_id = ci.cart_id
+                WHERE c.user_id = $userId";
+
+        $result = mysqli_query($conn, $sql);
+
+        if ($result) {
+            $row = mysqli_fetch_assoc($result);
+            return $row['count'] ?? 0;
+        }
+    }
+
+    return 0;
+}
+// Get wishlist count for header
+function getWishlistCount() {
+
+    if (isLoggedIn()) {
+
+        global $conn;
+
+        $userId = (int)getCurrentUserId();
+
+        $sql = "SELECT COUNT(*) AS count
+                FROM wishlist
+                WHERE user_id = $userId";
+
+        $result = mysqli_query($conn, $sql);
+
+        if ($result) {
+            $row = mysqli_fetch_assoc($result);
+            return $row['count'] ?? 0;
+        }
+    }
+
+    return 0;
+}
+
 // Get category name by slug
 function getCategoryBySlug($slug) {
     global $conn;
@@ -218,6 +266,48 @@ function getAllCategories() {
     return $categories;
 }
 
+function getProductBySlug($slug) {
+
+    global $conn;
+
+    $slug = mysqli_real_escape_string($conn, $slug);
+
+    $sql = "SELECT p.*, c.category_name, c.slug AS category_slug
+            FROM products p
+            JOIN categories c ON p.category_id = c.category_id
+            WHERE p.slug = '$slug'
+            AND p.is_active = 1";
+
+    $result = mysqli_query($conn, $sql);
+
+    if ($result && mysqli_num_rows($result) > 0) {
+        return mysqli_fetch_assoc($result);
+    }
+
+    return null;
+}
+function getProductImages($productId) {
+
+    global $conn;
+
+    $productId = (int)$productId;
+
+    $sql = "SELECT *
+            FROM product_images
+            WHERE product_id = $productId
+            ORDER BY is_primary DESC, display_order";
+
+    $result = mysqli_query($conn, $sql);
+    $images = [];
+
+    if ($result) {
+        while ($row = mysqli_fetch_assoc($result)) {
+            $images[] = $row;
+        }
+    }
+
+    return $images;
+}
 function getAverageRating($productId) {
 
     global $conn;
