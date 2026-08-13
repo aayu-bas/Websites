@@ -1,0 +1,306 @@
+
+:root{
+  --color-pink:#f4b9e8;
+  --color-yellow:#ffffb7;
+  --color-white:#fff;
+  --color-black: #2d2d2d;
+  --color-link:rgb(175, 220, 250);
+  --color-sale:#fbf2dc;
+  --color-card:#fae0c3;
+  --color-purple: #8d6cf7; 
+  --color-light-pink:#ffe8f0;
+  --color-brown:#8b6f47;
+  --color-dark-brown: #5a3e2b;
+  --color-price:#c08497;
+  --color-green: #7d9b45;
+  --color-gray: #666666;
+  --color-light-green: #e0f8c5;
+  --color-cream: #fff8e7;
+  --color-beige: #f5e6d3;
+  --color-light-gray: #f5f5f5;
+  /* --color-green: #659e5b; */
+  --color-instagram: #c44b9b;
+  --color-pinterest: #c0392b;
+  --color-facebook: #3b5998;
+   --color-whatsapp: #25d366;
+   --color-orange: #ffc067;
+   --color-red:#fa7777;
+
+   --radius-md: 16px;
+   --radius-lg: 24px;
+   --radius-sm: 8px;
+   --radius-xl: 32px;
+    --radius-full: 50px;
+
+  --shadow-soft: 0 4px 20px rgba(0,0,0,0.08);
+  --shadow-medium: 0 8px 30px rgba(0,0,0,0.12);
+  --shadow-hover: 0 12px 40px rgba(0,0,0,0.15);
+}
+
+.admin-login-page {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #faf7f2 0%, #f5f0e8 50%, #f0e6d8 100%);
+    padding: 20px;
+    position: relative;
+}
+
+/* Subtle dot pattern overlay for texture */
+.admin-login-page::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: radial-gradient(#d4c4b0 1px, transparent 1px);
+    background-size: 28px 28px;
+    opacity: 0.12;
+    pointer-events: none;
+}
+
+/* Login Card */
+.admin-login-box {
+    width: 100%;
+    max-width: 440px;
+    background: rgba(255, 255, 255, 0.96);
+    backdrop-filter: blur(12px);
+    border-radius: 28px;
+    padding: 52px 44px;
+    box-shadow: 
+        0 4px 6px -1px rgba(93, 64, 55, 0.04),
+        0 12px 32px -4px rgba(93, 64, 55, 0.08),
+        0 0 0 1px rgba(139, 110, 90, 0.05);
+    position: relative;
+    z-index: 1;
+    animation: loginFadeIn 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@keyframes loginFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(24px) scale(0.98);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+/* Logo Section */
+.admin-login-box .logo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    margin-bottom: 36px !important;
+}
+
+.admin-login-box .logo-icon {
+    width: 52px;
+    height: 52px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #f8e8e0 0%, #f0d5c5 100%);
+    border-radius: 16px;
+    box-shadow: 0 2px 10px rgba(139, 110, 90, 0.1);
+    flex-shrink: 0;
+}
+
+.admin-login-box .logo-image {
+    width: 34px;
+    height: 34px;
+    object-fit: contain;
+}
+
+.admin-login-box .logo span {
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: var(--color-dark-brown);
+    letter-spacing: -0.5px;
+}
+
+/* Flash / Error Messages */
+.admin-login-box .flash-message {
+    border-radius: 14px;
+    padding: 14px 18px;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 28px !important;
+    border: none;
+    position: static !important;
+}
+
+.admin-login-box .flash-message.error {
+    background: #fdf2f2;
+    color: #b91c1c;
+    box-shadow: 0 1px 4px rgba(185, 28, 28, 0.06);
+}
+
+.admin-login-box .flash-message i {
+    font-size: 1.15rem;
+    flex-shrink: 0;
+}
+
+/* Form Fields */
+.admin-login-box .form-group {
+    margin-bottom: 22px;
+}
+
+.admin-login-box label {
+    display: block;
+    margin-bottom: 10px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--color-dark-brown);
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+}
+/* .admin-login-box span{
+    font-family: "Lilita One", sans-serif;
+    font-weight: 200;
+    font-style: normal; 
+} */
+
+/* Input with Icon */
+.admin-login-box .input-icon {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.admin-login-box .input-icon i {
+    position: absolute;
+    left: 18px;
+    color: #b8a99a;
+    font-size: 0.95rem;
+    transition: color 0.3s ease;
+    pointer-events: none;
+}
+
+.admin-login-box .input-icon input {
+    width: 100%;
+    padding: 15px 16px 15px 48px;
+    border: 2px solid #ede6dd;
+    border-radius: 16px;
+    font-size: 0.95rem;
+    color: var(--color-dark-brown);
+    background: #fdfcfa;
+    transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+    outline: none;
+}
+
+.admin-login-box .input-icon input::placeholder {
+    color: #c8bdb3;
+    font-weight: 400;
+}
+
+.admin-login-box .input-icon input:hover {
+    border-color: #ddd3c8;
+    background: #ffffff;
+}
+
+.admin-login-box .input-icon input:focus {
+    border-color: var(--color-purple);
+    background: #ffffff;
+    box-shadow: 0 0 0 4px rgba(156, 123, 184, 0.1);
+}
+
+.admin-login-box .input-icon:focus-within i {
+    color: var(--color-purple);
+}
+
+/* Login Button */
+.admin-login-box .auth-btn {
+    width: 100% !important;
+    margin-top: 14px !important;
+    padding: 16px;
+    border-radius: 16px;
+    font-size: 1rem;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    background: linear-gradient(135deg, var(--color-purple) 0%, #b08ec9 100%);
+    color: #ffffff;
+    box-shadow: 0 4px 14px rgba(156, 123, 184, 0.3);
+    transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+/* Shimmer effect on hover */
+.admin-login-box .auth-btn::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.25), transparent);
+    transition: left 0.6s ease;
+}
+
+.admin-login-box .auth-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(156, 123, 184, 0.35);
+}
+
+.admin-login-box .auth-btn:hover::after {
+    left: 100%;
+}
+
+.admin-login-box .auth-btn:active {
+    transform: translateY(0);
+}
+
+.admin-login-box .auth-btn i {
+    margin-right: 8px;
+}
+
+/* Back to Store Link */
+.admin-login-box div:last-child {
+    margin-top: 24px !important;
+    text-align: center;
+}
+
+.admin-login-box a[href*="index.php"] {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--color-purple);
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    padding: 8px 14px;
+    border-radius: 10px;
+}
+
+.admin-login-box a[href*="index.php"]:hover {
+    color: #7a5f94;
+    background: rgba(156, 123, 184, 0.08);
+    transform: translateX(-3px);
+}
+
+/* Responsive */
+@media (max-width: 520px) {
+    .admin-login-box {
+        padding: 40px 28px;
+        border-radius: 24px;
+    }
+    
+    .admin-login-page {
+        padding: 16px;
+        background: #faf7f2;
+    }
+    
+    .admin-login-page::before {
+        display: none;
+    }
+    
+    .admin-login-box .logo span {
+        font-size: 1.35rem;
+    }
+}
