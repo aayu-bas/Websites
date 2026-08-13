@@ -57,7 +57,7 @@ if ($_SERVER['REQUEST_METHOD']== 'POST') {
 
                 mysqli_query($conn, $updateSql);
                 //handle remember me
-
+ 
                 if ($remember) {
 
                 $token = bin2hex(random_bytes(32));
@@ -109,8 +109,8 @@ $extraCSS = '<link rel="stylesheet" href="' . ASSETS_URL . '/css/auth.css">';
 
         <?php if ($error): ?>
             <div class="flash-message error">
-                <i class="fas fa-exclamation-circle"></i>
-                <span><?php echo htmlspecialchars($error); ?></span>
+                <i class="fas fa-exclamation-circle" style="color:rgb(198,87,84);"></i>
+                <span style="color: rgb(198,87,84);"><?php echo htmlspecialchars($error); ?></span>
             </div>
         <?php endif; ?>
 

@@ -1,5 +1,6 @@
 <?php
 require_once __DIR__ . '/config/config.php';
+
 $pageTitle='Home ';
 
 global $conn;
@@ -223,7 +224,7 @@ require_once __DIR__ . '/includes/header.php';
             <div class="products-grid">
                 <?php if (!empty($featuredProducts)): ?>
                     <?php foreach ($featuredProducts as $product): ?>
-                <div class="product-card">
+                <div class="card">
                     <div class="product-image">
                         <img src="<?php echo ASSETS_URL;?>/images/products/<?php echo $product['primary_image'] ?? 'placeholder.jpg'; ?>" alt="<?php echo htmlspecialchars($product['product_name']); ?>">
                         <div class="product-badges">

@@ -1,9 +1,10 @@
 <?php 
 require_once __DIR__ . '/../config/config.php';
 $currentPage = basename($_SERVER['PHP_SELF'], '.php');
+$cartCount = getCartCount();
+$categories = getAllCategories();
+// $flashMessages = getFlashMessages();
 $wishlistCount = 0;
-$cartCount = 0;
-// $categories = getAllCategories();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -15,6 +16,7 @@ $cartCount = 0;
     <link rel="stylesheet" href="<?php echo ASSETS_URL; ?>/css/style.css">
     <link rel="icon" href="yarnify.png">
     <?php if (isset($extraCSS)) echo $extraCSS; ?>
+    
 </head>
 <body>
     <nav class="navbar">
@@ -37,17 +39,6 @@ $cartCount = 0;
                 <a href="<?php echo SITE_URL; ?>/pages/search.php" class="nav-icon" title="search">
                     <i class="fa-solid fa-magnifying-glass"></i>
                 </a>
-
-                <!-- <a href="<?php echo SITE_URL; ?>/pages/wishlist.php" class="nav-icon" title="Wishlist" >
-                    <i class="fa-solid fa-heart"></i>
-                </a>
-
-                <a href="<?php echo SITE_URL; ?>/pages/cart.php" class="nav-icon cart-icon" title="Cart" >
-                    <i class="fa-solid fa-bag-shopping"></i>
-                </a>
-                <a href="<?php echo SITE_URL; ?>/pages/profile.php" class="nav-icon" title="Wishlist" >
-                    <i class="fa-solid fa-user"></i>
-                </a> -->
                 <?php if (isLoggedIn()): ?>
                 <a href="<?php echo SITE_URL; ?>/pages/wishlist.php" class="nav-icon" title="Wishlist">
                     <i class="fas fa-heart"></i>
@@ -58,7 +49,7 @@ $cartCount = 0;
                 <a href="<?php echo SITE_URL; ?>/pages/cart.php" class="nav-icon cart-icon" title="Cart">
                     <i class="fas fa-shopping-bag"></i>
                     <?php if ($cartCount > 0): ?>
-                    <span class="badge cart-badge"><?php echo $cartCount; ?></span>
+                    <span class="badge cart-badge" style="<?php echo $cartCount > 0 ? '' : 'display:none;'; ?>"><?php echo $cartCount; ?></span>
                     <?php endif; ?>
                 </a>
                 <!-- <a href="<?php echo SITE_URL; ?>/pages/profile.php" class="nav-icon" title="My Account">
@@ -78,10 +69,6 @@ $cartCount = 0;
                         <a href="<?php echo SITE_URL; ?>/pages/profile.php">
                             <i class="fas fa-user-circle"></i>
                             My Profile
-                        </a>
-                        <a href="<?php echo SITE_URL; ?>/pages/orders.php">
-                            <i class="fas fa-box"></i>
-                            My Orders
                         </a>
                         <a href="<?php echo SITE_URL; ?>/pages/settings.php">
                             <i class="fas fa-cog"></i>

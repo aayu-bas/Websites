@@ -9,6 +9,7 @@ $sortBy = $_GET['sort'] ?? 'newest';
 $minPrice = $_GET['min_price'] ?? '';
 $maxPrice = $_GET['max_price'] ?? '';
 $page = max(1, intval($_GET['page'] ?? 1));
+$cartCount = getCartCount();
 
 //building query
 $whereConditions = [];
@@ -81,6 +82,7 @@ if ($categorySlug) {
     $currentCategory = getCategoryBySlug($categorySlug);
 }
 $extraCSS = '<link rel="stylesheet" href="' . ASSETS_URL . '/css/style.css">';
+$extraJS = '<script src="' . ASSETS_URL . '/js/script.js"></script>';
 
 require_once __DIR__ . '/../includes/header.php';
 ?>

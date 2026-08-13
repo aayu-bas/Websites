@@ -36,7 +36,7 @@ $extraCSS = '<link rel="stylesheet" href="' . ASSETS_URL . '/css/style.css">';
                 <p>Now, we want to share that feeling with you. Whether you're looking for a unique gift, a cozy companion, or starting your own crochet journey, we're here to help! 🌟</p>
             </div>
             <div class="story-image">
-                <img src="photos/why_crochet.jpg" alt="Why Crochet">
+                <img src="<?php echo ASSETS_URL; ?>/images/products/crochet.png" alt="Why Crochet">
             </div>
         </div>
     </section>
