@@ -4,7 +4,7 @@ $currentPage = basename($_SERVER['PHP_SELF'], '.php');
 $cartCount = getCartCount();
 $categories = getAllCategories();
 // $flashMessages = getFlashMessages();
-$wishlistCount = 0;
+$wishlistCount = getWishlistCount();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -36,15 +36,28 @@ $wishlistCount = 0;
             </ul>
     
             <div class="nav-actions">
-                <a href="<?php echo SITE_URL; ?>/pages/search.php" class="nav-icon" title="search">
-                    <i class="fa-solid fa-magnifying-glass"></i>
-                </a>
+                <div class="header-search">
+                    <form
+                        action="<?php echo SITE_URL; ?>/pages/shop.php"
+                        method="GET"
+                        class="header-search-form"
+                    >
+                        <input type="text" name="q" class="search-input" placeholder="Search crochet products..."
+                        autocomplete="off">
+
+                        <button type="submit" class="search-submit" aria-label="Search">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                        </button>
+                    </form>
+
+                <div class="search-results"></div>
+            </div>
                 <?php if (isLoggedIn()): ?>
                 <a href="<?php echo SITE_URL; ?>/pages/wishlist.php" class="nav-icon" title="Wishlist">
                     <i class="fas fa-heart"></i>
-                    <?php if ($wishlistCount > 0): ?>
-                    <span class="badge wishlist-badge"><?php echo $wishlistCount; ?></span>
-                    <?php endif; ?>
+
+                    <span class="badge wishlist-badge" style="<?php echo $wishlistCount > 0 ? '' : 'display: none;'; ?>"><?php echo $wishlistCount; ?>
+                    </span>
                 </a>
                 <a href="<?php echo SITE_URL; ?>/pages/cart.php" class="nav-icon cart-icon" title="Cart">
                     <i class="fas fa-shopping-bag"></i>
@@ -85,33 +98,36 @@ $wishlistCount = 0;
                 <a href="<?php echo SITE_URL; ?>/pages/login.php" class="btn btn-small btn-primary">Login</a>
                 <?php endif; ?>
 
-                <!-- <button class="mobile-menu-btn">
+                <button class="mobile-menu-btn">
                     <i class="fas fa-bars"></i>
-                </button> -->
+                </button>
             </div>
         </div>
     </nav>
     <script>
-    document.addEventListener("DOMContentLoaded", function () {
+        document.addEventListener("DOMContentLoaded", function () {
 
-    const userBtn = document.querySelector(".user-btn");
-    const dropdown = document.querySelector(".user-dropdown");
+        const userBtn = document.querySelector(".user-btn");
+        const dropdown = document.querySelector(".user-dropdown");
 
-    if(userBtn){
+        if(userBtn){
 
-    userBtn.addEventListener("click", function(e){
-        e.stopPropagation();
-        dropdown.classList.toggle("show");
-    });
+        userBtn.addEventListener("click", function(e){
+            e.stopPropagation();
+            dropdown.classList.toggle("show");
+        });
 
-    document.addEventListener("click", function(){
-        dropdown.classList.remove("show");
-    });
+        document.addEventListener("click", function(){
+            dropdown.classList.remove("show");
+        });
 
-    }
+        }
 
-    });
+        });
 
+    </script>
+    <script>
+        window.YARNIFY_SITE_URL = <?php echo json_encode(rtrim(SITE_URL, '/')); ?>;
     </script>
 </body>
 </html>
